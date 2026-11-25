@@ -18,6 +18,11 @@ const stageOf = id => {
 };
 const stateText = status => status ?? "no reporting agents";
 const art = name => image(`mods/punk-venue/art/${name}.svg`);
+const STEP_PERIOD = 800;
+const IDLE_PERIOD = 1800;
+// As in Fellowship, crossing past 0..1 makes the linear opacity swap crisp.
+const SWAP_LOW = -6;
+const SWAP_HIGH = 7;
 
 // Only the fields the marquee shows. No prompts, results or conversation content.
 const FEED_SCRIPT = `
@@ -248,20 +253,25 @@ export default class PunkVenue extends View {
         .children(rows.slice(page * PAGE, (page + 1) * PAGE).map(r => rowCard(r, stage, stage === 0)))
         .when(!rows.length, el => el.child(div().p(5).text_color(t.muted).child(stage === 0 ? "No spaces" : "No tabs")));
     };
-    // Fixed scene box: entrance and stage share geometry. Only working figures
-    // and two lights animate; GPUI loops run only while their elements are drawn.
+    // Fixed scene box: entrance and stage share geometry. Working and idle figures
+    // swap poses in place; GPUI loops run only while their elements are drawn.
     const scene = div().id("venue-scene").relative().w_full().h(sceneHeight).flex_none().overflow_hidden().bg(t.canvas)
       .when(!members.length, el => el.child(art("entrance").absolute().left(artLeft).top(0).w(artWidth).h(Math.round(artWidth / 4))))
       .when(members.length, el => el
         .child(art(`backdrop-${stageOf(space?.id)}`).absolute().left(artLeft).top(0).w(artWidth).h(Math.round(artWidth / 4)))
         .children([0, 1].map(i => div().id(`light-${i}`).absolute().left(artLeft + (i ? artWidth * 0.85 : artWidth * 0.08)).top(4).w(7).h(7).rounded_full()
           .bg(t.accent).loop("opacity", { from: 0.35, to: 1, period: 1600 + i * 200 })))
-        .children(band.slots.slice(0, Math.max(4, band.slots.reduce((n, a, i) => a ? i + 1 : n, 0))).map((a, i) =>
-          div().id(`figure-${PARTS[i]}`).absolute().left(Math.round(artLeft + (i + 0.5) * artWidth / 7 - figure / 2)).top(Math.round(sceneHeight * 0.34)).w(figure).h(figure + 3)
-            .child(div().id(`motion-${PARTS[i]}`).relative().top(0).w(figure).h(figure)
-              .when(a?.status === "working", el => el.loop("top", { from: 0, to: 3, period: 650 + i * 70 }))
-              .child(art(a ? `${PARTS[i]}-${a.status}` : `empty-${EMPTY[i]}`).w(figure).h(figure)))
-            .when(a, el => el.cursor_pointer().tooltip(`${a.address} / ${a.status}`).on_click((_e, cx) => this.activate(2, groups[2].find(r => r.key === `agent:${a.address}`), cx)))))
+        .children(band.slots.slice(0, Math.max(4, band.slots.reduce((n, a, i) => a ? i + 1 : n, 0))).map((a, i) => {
+          const part = PARTS[i];
+          const period = a?.status === "working" ? STEP_PERIOD : a?.status === "idle" ? IDLE_PERIOD : null;
+          const still = art(a ? `${part}-${a.status}` : `empty-${EMPTY[i]}`).w(figure).h(figure);
+          return div().id(`figure-${part}`).absolute().left(Math.round(artLeft + (i + 0.5) * artWidth / 7 - figure / 2)).top(Math.round(sceneHeight * 0.34)).w(figure).h(figure + 3)
+            .child(div().id(`motion-${part}`).relative().top(0).w(figure).h(figure)
+              .child(period === null ? still : still.loop("opacity", { from: SWAP_HIGH, to: SWAP_LOW, period, easing: "linear" }))
+              .when(period !== null, el => el.child(art(`${part}-strike`).absolute().top(0).left(0).w(figure).h(figure)
+                .loop("opacity", { from: SWAP_LOW, to: SWAP_HIGH, period, easing: "linear" }))))
+            .when(a, el => el.cursor_pointer().tooltip(`${a.address} / ${a.status}`).on_click((_e, cx) => this.activate(2, groups[2].find(r => r.key === `agent:${a.address}`), cx)));
+        }))
         .when(band.overflow.length, el => el.child(div().absolute().right(3).top(3).px(4).bg(t.chrome).text_color(t.accent).child(`+${band.overflow.length}`)))
         .when(guests.length, el => el
           .child(div().absolute().left(artLeft + 5).top(3).px(4).bg(t.chrome).text_color(t.muted).text_size(9)
