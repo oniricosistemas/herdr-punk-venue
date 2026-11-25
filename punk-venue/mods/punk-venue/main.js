@@ -261,6 +261,23 @@ export default class PunkVenue extends View {
         .child(art(`backdrop-${stageOf(space?.id)}`).absolute().left(artLeft).top(0).w(artWidth).h(Math.round(artWidth / 4)))
         .children([0, 1].map(i => div().id(`light-${i}`).absolute().left(artLeft + (i ? artWidth * 0.85 : artWidth * 0.08)).top(4).w(7).h(7).rounded_full()
           .bg(t.accent).loop("opacity", { from: 0.35, to: 1, period: 1600 + i * 200 })))
+        // Decorative only: two washes and two puffs, clipped by the scene and behind the figures.
+        .when(artWidth > 0, stage => stage
+          .children([0, 1].map(i => div().id(`light-pool-${i}`).absolute()
+            .left(artLeft + artWidth * (i ? 0.73 : 0.01)).top(sceneHeight * 0.56)
+            .w(artWidth * 0.26).h(sceneHeight * 0.4).rounded_full().bg(t.accent)
+            .loop("opacity", { from: 0.05, to: 0.16, period: 1600 + i * 200 })))
+          .children([0, 1].map(i => {
+            const from = artLeft + artWidth * (i ? 0.66 : 0.05);
+            const to = artLeft + artWidth * (i ? 0.05 : 0.66);
+            const top = sceneHeight * (i ? 0.84 : 0.7);
+            const period = i ? 9700 : 7300;
+            return div().id(`haze-puff-${i}`).absolute().left(from).top(top)
+              .w(artWidth * 0.3).h(sceneHeight * 0.07).rounded_full().bg(t.accent)
+              .loop("left", { from, to, period })
+              .loop("top", { from: top, to: top - sceneHeight * 0.05, period })
+              .loop("opacity", { from: 0.03, to: 0.09, period });
+          })))
         .children(band.slots.slice(0, Math.max(4, band.slots.reduce((n, a, i) => a ? i + 1 : n, 0))).map((a, i) => {
           const part = PARTS[i];
           const period = a?.status === "working" ? STEP_PERIOD : a?.status === "idle" ? IDLE_PERIOD : null;
@@ -288,11 +305,17 @@ export default class PunkVenue extends View {
               .child(art(`${["guitar2", "keys", "sax"][i]}-${pose}`).w(size).h(size));
           })))
         .child(art("crowd").absolute().left(artLeft).bottom(0).w(artWidth).h(Math.max(8, Math.round(artWidth / 8)))));
-    const marquee = () => div().id("phase-marquee").absolute()
-      .left(artLeft + 4).top(2).px(4).py(2).rounded(2)
-      .bg(t.chrome).border(1).border_color(t.accent).items_center().justify_center()
-      .tooltip(`Gentle Shell · phase=${this.phase ?? "-"} · state=${this.feedState ?? "-"}${this.feedError ? ` · ${this.feedError}` : ""} (sesión más reciente; sin atribución por space)`)
-      .child(div().truncate().text_size(9).text_color(t.accent).child(String(this.phase ?? this.feedState).toUpperCase()));
+    const marquee = () => {
+      const label = String(this.phase ?? this.feedState).toUpperCase();
+      // The phase can outlive the work; use live status from the current space.
+      const working = members.some(a => a.status === "working");
+      const text = div().truncate().text_size(9).text_color(t.accent);
+      return div().id("phase-marquee").absolute()
+        .left(artLeft + 4).top(2).w(108).px(4).py(2).rounded(2)
+        .bg(t.chrome).border(1).border_color(t.accent)
+        .tooltip(`Gentle Shell · phase=${this.phase ?? "-"} · state=${this.feedState ?? "-"}${this.feedError ? ` · ${this.feedError}` : ""} (sesión más reciente; sin atribución por space)`)
+        .child(working ? text.frames([label, `${label}.`, `${label}..`, `${label}...`], 420) : text.child(label));
+    };
     // A sibling of the scene, painted after it, so stage art never covers the sign.
     const sceneBlock = div().relative().w_full().h(sceneHeight).flex_none()
       .child(scene)
