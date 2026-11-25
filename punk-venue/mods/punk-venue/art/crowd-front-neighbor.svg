@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Ruido Roto front row; blue jacket and a hand in the air</title>
+  <rect x="12" y="22" width="16" height="18" fill="#eee3c5"/>
+  <rect x="9" y="19" width="22" height="9" fill="#151412"/>
+  <path d="M9 39 H31 L37 64 H3 Z" fill="#627b88" stroke="#151412" stroke-width="2"/>
+  <path d="M30 46 L46 40 L51 24" fill="none" stroke="#eee3c5" stroke-width="6"/>
+  <path d="M46 25 V12 H50 V17 H54 V10 H58 V23 L54 27 Z" fill="#eee3c5"/>
+  <rect x="19" y="32" width="3" height="2" fill="#151412"/>
+  <rect x="12" y="44" width="4" height="3" fill="#c4a34f"/>
+</svg>

@@ -253,6 +253,57 @@ export default class PunkVenue extends View {
         .children(rows.slice(page * PAGE, (page + 1) * PAGE).map(r => rowCard(r, stage, stage === 0)))
         .when(!rows.length, el => el.child(div().p(5).text_color(t.muted).child(stage === 0 ? "No spaces" : "No tabs")));
     };
+    const figureTop = Math.round(sceneHeight * 0.34);
+    const figureLeft = i => Math.round(artLeft + (i + 0.5) * artWidth / 7 - figure / 2);
+    const stageFigures = () => {
+      const children = band.slots.slice(0, Math.max(4, band.slots.reduce((n, a, i) => a ? i + 1 : n, 0))).map((a, i) => {
+        const part = PARTS[i];
+        const period = a?.status === "working" ? STEP_PERIOD : a?.status === "idle" ? IDLE_PERIOD : null;
+        const still = art(a ? `${part}-${a.status}` : `empty-${EMPTY[i]}`).w(figure).h(figure);
+        return div().id(`figure-${part}`).absolute().left(figureLeft(i)).top(figureTop).w(figure).h(figure + 3)
+          .child(div().id(`motion-${part}`).relative().top(0).w(figure).h(figure)
+            .child(period === null ? still : still.loop("opacity", { from: SWAP_HIGH, to: SWAP_LOW, period, easing: "linear" }))
+            .when(period !== null, el => el.child(art(`${part}-strike`).absolute().top(0).left(0).w(figure).h(figure)
+              .loop("opacity", { from: SWAP_LOW, to: SWAP_HIGH, period, easing: "linear" }))))
+          .when(a, el => el.cursor_pointer().tooltip(`${a.address} / ${a.status}`).on_click((_e, cx) => this.activate(2, groups[2].find(r => r.key === `agent:${a.address}`), cx)));
+      });
+      const unit = figure / 64;
+      const size = figure * 0.28;
+      const left = figureLeft(0) + 39 * unit;
+      // Stage backdrops mark the floor at y=54; the wedge stands just inside it.
+      const monitorFeetY = Math.round(artWidth / 4) * 55 / 64;
+      const top = monitorFeetY - size;
+      // Test the solid wedge face against painted boots, not the transparent sprite boxes.
+      // Both poses of every occupied slot share the same two boot rectangles.
+      const figureFeetY = figureTop + 61 * unit;
+      const overlaps = size > 0 && top + size * 24 / 64 < figureFeetY
+        && monitorFeetY > figureTop + 57 * unit
+        && band.slots.some((a, i) => a && [19, 35].some(x => {
+          const bootLeft = figureLeft(i) + x * unit;
+          return left < bootLeft + 10 * unit && bootLeft < left + size;
+        }));
+      // The shared boot baseline puts all figures on one side of the wedge. On a
+      // tie the wedge paints last, like a monitor at the front edge of the stage.
+      if (overlaps) children.splice(figureFeetY > monitorFeetY ? 0 : children.length, 0,
+        art("monitor-riser").absolute().left(left).top(top).w(size).h(size));
+      return children;
+    };
+    const crowdCutouts = () => {
+      // Keep both sweeps below the figure boxes and inside the static strip.
+      const clearance = Math.min(sceneHeight - (figureTop + figure + 3), Math.round(artWidth / 8));
+      const size = clearance * 0.7;
+      if (size <= 0) return [];
+      const bob = Math.min(5, size / 6);
+      const top = sceneHeight - size - bob;
+      return ["punk", "neighbor"].map((name, i) => {
+        const offset = Math.sin((i - 0.5) * Math.PI) * bob;
+        const from = top + offset / 3;
+        const to = top + offset;
+        return art(`crowd-front-${name}`).absolute()
+          .left(artLeft + artWidth * (i ? 243 : 206) / 512 - size / 2).top(from).w(size).h(size)
+          .loop("top", { from, to, period: i ? 1730 : 1120 });
+      });
+    };
     // Fixed scene box: entrance and stage share geometry. Working and idle figures
     // swap poses in place; GPUI loops run only while their elements are drawn.
     const scene = div().id("venue-scene").relative().w_full().h(sceneHeight).flex_none().overflow_hidden().bg(t.canvas)
@@ -278,17 +329,7 @@ export default class PunkVenue extends View {
               .loop("top", { from: top, to: top - sceneHeight * 0.05, period })
               .loop("opacity", { from: 0.03, to: 0.09, period });
           })))
-        .children(band.slots.slice(0, Math.max(4, band.slots.reduce((n, a, i) => a ? i + 1 : n, 0))).map((a, i) => {
-          const part = PARTS[i];
-          const period = a?.status === "working" ? STEP_PERIOD : a?.status === "idle" ? IDLE_PERIOD : null;
-          const still = art(a ? `${part}-${a.status}` : `empty-${EMPTY[i]}`).w(figure).h(figure);
-          return div().id(`figure-${part}`).absolute().left(Math.round(artLeft + (i + 0.5) * artWidth / 7 - figure / 2)).top(Math.round(sceneHeight * 0.34)).w(figure).h(figure + 3)
-            .child(div().id(`motion-${part}`).relative().top(0).w(figure).h(figure)
-              .child(period === null ? still : still.loop("opacity", { from: SWAP_HIGH, to: SWAP_LOW, period, easing: "linear" }))
-              .when(period !== null, el => el.child(art(`${part}-strike`).absolute().top(0).left(0).w(figure).h(figure)
-                .loop("opacity", { from: SWAP_LOW, to: SWAP_HIGH, period, easing: "linear" }))))
-            .when(a, el => el.cursor_pointer().tooltip(`${a.address} / ${a.status}`).on_click((_e, cx) => this.activate(2, groups[2].find(r => r.key === `agent:${a.address}`), cx)));
-        }))
+        .children(stageFigures())
         .when(band.overflow.length, el => el.child(div().absolute().right(3).top(3).px(4).bg(t.chrome).text_color(t.accent).child(`+${band.overflow.length}`)))
         .when(guests.length, el => el
           .child(div().absolute().left(artLeft + 5).top(3).px(4).bg(t.chrome).text_color(t.muted).text_size(9)
@@ -304,7 +345,8 @@ export default class PunkVenue extends View {
               .on_click(() => run("terminal.peek", { terminal: g.address }))
               .child(art(`${["guitar2", "keys", "sax"][i]}-${pose}`).w(size).h(size));
           })))
-        .child(art("crowd").absolute().left(artLeft).bottom(0).w(artWidth).h(Math.max(8, Math.round(artWidth / 8)))));
+        .child(art("crowd").absolute().left(artLeft).bottom(0).w(artWidth).h(Math.max(8, Math.round(artWidth / 8))))
+        .children(crowdCutouts()));
     const marquee = () => {
       const label = String(this.phase ?? this.feedState).toUpperCase();
       // The phase can outlive the work; use live status from the current space.

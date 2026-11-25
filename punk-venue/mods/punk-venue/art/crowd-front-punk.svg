@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Barro Sur front row; red spikes and a raised fist</title>
+  <rect x="12" y="19" width="16" height="18" fill="#eee3c5"/>
+  <path d="M9 25 V13 L18 17 L21 7 L28 14 L32 26 Z" fill="#b93b36"/>
+  <path d="M9 36 H31 L37 64 H3 Z" fill="#151412"/>
+  <path d="M30 43 L49 27 V11" fill="none" stroke="#eee3c5" stroke-width="6"/>
+  <rect x="43" y="3" width="14" height="11" fill="#eee3c5"/>
+  <path d="M13 43 H18 V45 H15 V47 H18 V51 H13 V49 H16 V47 H13 Z M21 43 H27 V45 H23 V47 H27 V51 H21 V49 H25 V47 H21 Z" fill="#eee3c5"/>
+  <rect x="19" y="30" width="3" height="2" fill="#151412"/>
+</svg>
