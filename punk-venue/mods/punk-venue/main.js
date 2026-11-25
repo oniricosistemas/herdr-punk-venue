@@ -4,6 +4,11 @@ import { spaces, agents, terminals, theme, run, nextCommand, checking, setAgentO
 
 const PAGE = 12;
 const LANES = ["Cartelera", "Escena", "Banda"];
+const LANE_WEIGHTS = [2, 5, 2];
+const LANE_TOTAL = LANE_WEIGHTS.reduce((sum, weight) => sum + weight, 0);
+const ROOT_PADDING = 6;
+const ROOT_BORDER_WIDTH = 1;
+const LANE_ROW_GAP = 6;
 const PARTS = ["guitar", "bass", "drums", "singer", "guitar2", "keys", "sax"];
 const EMPTY = ["guitar", "bass", "drums", "mic", "guitar", "keys", "sax"];
 // Stage variants are chosen per space, never per render, so a gig never changes venue.
@@ -223,16 +228,14 @@ export default class PunkVenue extends View {
       }
     });
     const bodyHeight = Math.max(0, this.size.height - 110);
-    // Lane shares, Cartelera / Escena / Banda. Escena carries the stage, so it takes
-    // most of the row while the two list panes stay readable.
-    const LANE_WEIGHTS = [2, 5, 2];
-    const LANE_TOTAL = LANE_WEIGHTS.reduce((sum, w) => sum + w, 0);
-    const sceneWidth = Math.max(0, ((this.size.width - 48) * LANE_WEIGHTS[1]) / LANE_TOTAL);
+    const rowInsets = 2 * (ROOT_PADDING + ROOT_BORDER_WIDTH) + (LANES.length - 1) * LANE_ROW_GAP;
+    const sceneWidth = Math.max(0, this.size.width - rowInsets) * LANE_WEIGHTS[1] / LANE_TOTAL;
     // Scene art is a 4:1 strip, so the box follows that aspect instead of stretching it.
     const sceneHeight = Math.max(72, Math.min(Math.floor(sceneWidth / 4), Math.floor(bodyHeight * 0.9)));
     const figure = Math.max(0, Math.min(sceneWidth / 8, sceneHeight * 0.52));
     // image() fits by aspect ratio, so the art rect is what everything aligns to.
     const artWidth = Math.max(0, Math.min(sceneWidth, Math.round(sceneHeight * 4)));
+    const artHeight = Math.round(artWidth / 4);
     const artLeft = Math.max(0, Math.round((sceneWidth - artWidth) / 2));
     const button = (id, label, action) => div().id(id).px(6).py(2).rounded(3).flex_none().border(1).border_color(t.border)
       .bg(t.chrome).text_color(t.accent).cursor_pointer().hover(s => s.bg(t.hover)).on_click(action).child(label);
@@ -304,29 +307,37 @@ export default class PunkVenue extends View {
           .loop("top", { from, to, period: i ? 1730 : 1120 });
       });
     };
+    const washX = x => artLeft + artWidth * x / 256;
+    const washY = y => artHeight * y / 64;
+    // The gaps between side placards and the cloth are clear in all four backdrops:
+    // x=56..78 and 178..200, past the bunting at y=17. Stay below the marquee
+    // even when the artwork shrinks, and above the entire band/guest area.
+    const washTop = Math.max(22, washY(18));
+    const washHeight = Math.max(0, Math.min(washY(4), figureTop - 1 - washTop));
+    const washSides = [56, 178];
     // Fixed scene box: entrance and stage share geometry. Working and idle figures
     // swap poses in place; GPUI loops run only while their elements are drawn.
     const scene = div().id("venue-scene").relative().w_full().h(sceneHeight).flex_none().overflow_hidden().bg(t.canvas)
       .when(!members.length, el => el.child(art("entrance").absolute().left(artLeft).top(0).w(artWidth).h(Math.round(artWidth / 4))))
       .when(members.length, el => el
-        .child(art(`backdrop-${stageOf(space?.id)}`).absolute().left(artLeft).top(0).w(artWidth).h(Math.round(artWidth / 4)))
+        .child(art(`backdrop-${stageOf(space?.id)}`).absolute().left(artLeft).top(0).w(artWidth).h(artHeight))
         .children([0, 1].map(i => div().id(`light-${i}`).absolute().left(artLeft + (i ? artWidth * 0.85 : artWidth * 0.08)).top(4).w(7).h(7).rounded_full()
           .bg(t.accent).loop("opacity", { from: 0.35, to: 1, period: 1600 + i * 200 })))
-        // Decorative only: two washes and two puffs, clipped by the scene and behind the figures.
-        .when(artWidth > 0, stage => stage
-          .children([0, 1].map(i => div().id(`light-pool-${i}`).absolute()
-            .left(artLeft + artWidth * (i ? 0.73 : 0.01)).top(sceneHeight * 0.56)
-            .w(artWidth * 0.26).h(sceneHeight * 0.4).rounded_full().bg(t.accent)
+        // Passive paint only, clipped by the scene and drawn behind the figures.
+        .when(washHeight > 0, stage => stage
+          .children(washSides.map((x, i) => div().id(`light-pool-${i}`).absolute()
+            .left(washX(x + 2)).top(washTop + washHeight * 0.25)
+            .w(artWidth * 14 / 256).h(washHeight * 0.65).rounded_full().bg(t.accent)
             .loop("opacity", { from: 0.05, to: 0.16, period: 1600 + i * 200 })))
-          .children([0, 1].map(i => {
-            const from = artLeft + artWidth * (i ? 0.66 : 0.05);
-            const to = artLeft + artWidth * (i ? 0.05 : 0.66);
-            const top = sceneHeight * (i ? 0.84 : 0.7);
+          .children(washSides.map((x, i) => {
+            const from = washX(x + (i ? 10 : 1));
+            const to = washX(x + (i ? 1 : 10));
+            const top = washTop + washHeight * 0.5;
             const period = i ? 9700 : 7300;
             return div().id(`haze-puff-${i}`).absolute().left(from).top(top)
-              .w(artWidth * 0.3).h(sceneHeight * 0.07).rounded_full().bg(t.accent)
+              .w(artWidth * 11 / 256).h(washHeight * 0.33).rounded_full().bg(t.accent)
               .loop("left", { from, to, period })
-              .loop("top", { from: top, to: top - sceneHeight * 0.05, period })
+              .loop("top", { from: top, to: washTop + washHeight * 0.1, period })
               .loop("opacity", { from: 0.03, to: 0.09, period });
           })))
         .children(stageFigures())
@@ -388,14 +399,14 @@ export default class PunkVenue extends View {
           .child(div().text_size(10).text_color(t.muted).child(`${at >= 0 ? at + 1 : 0}/${rows.length}`))
           .child(button(`next-${stage}`, "›", (_e, cx) => this.moveItem(stage, 1, groups, cx))));
     };
-    return v_flex().id("punk-venue-root").size_full().min_w(0).min_h(0).overflow_hidden().p(6).gap(4).text_size(11).text_color(t.foreground)
-      .track_focus(this.handle).border(1).border_color(this.handle.is_focused() ? t.accent : t.border)
+    return v_flex().id("punk-venue-root").size_full().min_w(0).min_h(0).overflow_hidden().p(ROOT_PADDING).gap(4).text_size(11).text_color(t.foreground)
+      .track_focus(this.handle).border(ROOT_BORDER_WIDTH).border_color(this.handle.is_focused() ? t.accent : t.border)
       .on_size_change((size, cx) => { if (size.width !== this.size.width || size.height !== this.size.height) { this.size = size; cx.notify(); } })
       .on_mouse_down("left", (_e, cx) => { this.handle.focus(); cx.notify(); })
       .on_key_down((e, cx) => this.key(e, cx, groups))
       .child(h_flex().h(22).flex_none().gap(6).items_center().child(div().flex_1().truncate().font_semibold().child("PUNK VENUE"))
         .child(button("return-main", "Herdr / main [M]", () => run("layout.switch", { name: "main" }))))
-      .child(h_flex().flex_1().min_h(0).min_w(0).gap(6).children(LANES.map((_label, i) => lane(i))))
+      .child(h_flex().flex_1().min_h(0).min_w(0).gap(LANE_ROW_GAP).children(LANES.map((_label, i) => lane(i))))
       .child(div().h(12).flex_none().truncate().text_size(9).text_color(t.muted)
         .tooltip("←/→ lane; ↑/↓ candidate; Home/End; PageUp/PageDown; Enter/Space select/focus; ‹/› circular select; Escape: pane.go down; M: main. Scene follows Herdr's active space, not an unopened keyboard candidate. Banda includes every reporting agent in that space.")
         .child("←→ lane · ↑↓ candidate · Home/End · PgUp/PgDn · Enter/Space open · Esc terminal · M main"));
