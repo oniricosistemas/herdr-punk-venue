@@ -308,14 +308,19 @@ export default class PunkVenue extends View {
     const artLeft = Math.max(0, Math.round((sceneWidth - artWidth) / 2));
     const button = (id, label, action) => div().id(id).px(6).py(2).rounded(3).flex_none().border(1).border_color(t.border)
       .bg(t.chrome).text_color(t.accent).cursor_pointer().hover(s => s.bg(t.hover)).on_click(action).child(label);
-    const rowCard = (r, stage, poster = false) => v_flex().id(r.key).flex_none().min_w(0).h(40).px(7).py(2).gap(1)
+    // An optional leading icon keeps the instrument visible once a musician fills the slot,
+    // the way the empty rows already show it.
+    const rowText = r => v_flex().min_w(0).flex_1().gap(2)
+      .child(div().truncate().font_semibold().child(`${r.active ? "◆ " : ""}${r.name}`))
+      .child(div().truncate().text_size(10).text_color(t.muted).child(r.context))
+      .child(div().truncate().text_size(10).text_color(t[r.status] ?? t.muted).child(stateText(r.status)));
+    const rowCard = (r, stage, poster = false, icon = null) => h_flex().id(r.key).flex_none().min_w(0).h(56).px(7).py(4).gap(5).items_center()
       .bg(r.active ? t.selected : t.surface).border(poster ? 2 : 1)
       .border_color(this.handle.is_focused() && this.stage === stage && this.selected[stage] === r.key ? t.accent : r.active ? t.ansi5 : t.border)
       .rounded(3).cursor_pointer().hover(s => s.bg(t.hover)).tooltip(`${r.name}\n${r.context}\n${stateText(r.status)}`)
       .on_click((_e, cx) => this.activate(stage, r, cx))
-      .child(div().truncate().font_semibold().child(`${r.active ? "◆ " : ""}${r.name}`))
-      .child(div().truncate().text_size(10).text_color(t.muted).child(r.context))
-      .child(div().truncate().text_size(10).text_color(t[r.status] ?? t.muted).child(stateText(r.status)));
+      .when(icon, el => el.child(icon.flex_none().w(28).h(28)))
+      .child(rowText(r));
     const list = (stage, height) => {
       const rows = groups[stage];
       const at = Math.max(0, rows.findIndex(r => r.key === this.selected[stage]));
@@ -472,9 +477,9 @@ export default class PunkVenue extends View {
         // The stage always shows seven positions, so the list does too: an empty slot keeps
         // its gear row instead of vanishing as soon as somebody reports.
         .children(page === 0 ? band.slots.map((a, i) => a
-          ? rowCard(rows.find(r => r.key === `agent:${a.address}`), 2)
-          : h_flex().id(`empty-${i}`).h(26).flex_none().gap(4).items_center().text_color(t.muted)
-            .child(art(`empty-${EMPTY[i]}`).w(22).h(22)).child(`${PARTS[i]} / empty`)) : [])
+          ? rowCard(rows.find(r => r.key === `agent:${a.address}`), 2, false, art(`empty-${EMPTY[i]}`))
+          : h_flex().id(`empty-${i}`).h(40).flex_none().gap(4).items_center().text_color(t.muted)
+            .child(art(`empty-${EMPTY[i]}`).w(32).h(32)).child(`${PARTS[i]} / empty`)) : [])
         .when(band.overflow.length, el => el.child(div().text_color(t.muted).child(`+${band.overflow.length} overflow / off stage`)))
         .children(rows.slice(page * PAGE, (page + 1) * PAGE).filter(r => !band.slots.some(a => a && r.key === `agent:${a.address}`)).map(r => rowCard(r, 2)));
     };
