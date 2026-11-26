@@ -329,7 +329,9 @@ export default class PunkVenue extends View {
     const figureTop = Math.round(sceneHeight * 0.34);
     const figureLeft = i => Math.round(artLeft + (i + 0.5) * artWidth / 7 - figure / 2);
     const stageFigures = () => {
-      const children = band.slots.slice(0, Math.max(4, band.slots.reduce((n, a, i) => a ? i + 1 : n, 0))).map((a, i) => {
+      // Every position is always drawn, so the formation spans the stage instead of bunching
+      // into the left third when few agents report, and no figure shifts when a member joins.
+      const children = band.slots.map((a, i) => {
         const part = PARTS[i];
         const period = a?.status === "working" ? STEP_PERIOD : a?.status === "idle" ? IDLE_PERIOD : null;
         const still = art(a ? `${part}-${a.status}` : `empty-${EMPTY[i]}`).w(figure).h(figure);
