@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Entrance neighbor pose 2</title>
+  <rect x="7" y="10" width="5" height="6" fill="#eee3c5"/>
+  <rect x="6" y="9" width="7" height="3" fill="#151412"/>
+  <path d="M5 16 H12 L14 26 H3 Z" fill="#627b88" stroke="#151412" stroke-width="1"/>
+  <path d="M6 27 L5 35 M11 27 L13 35" fill="none" stroke="#627b88" stroke-width="3"/>
+  <path d="M4 18 L3 24 M12 18 L12 18" fill="none" stroke="#eee3c5" stroke-width="2"/>
+</svg>

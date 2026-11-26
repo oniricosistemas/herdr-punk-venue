@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
-  <title>Ruido Roto front row; moving face detail</title>
-  <g transform="translate(32 32) scale(12.308) translate(-4.5 -3.25)"><rect x="2.5" y="2" width="4" height="2.5" fill="#eee3c5"/><rect x="3" y="2.5" width="1" height="0.9" fill="#151412"/><rect x="5.1" y="2.5" width="1" height="0.9" fill="#151412"/></g>
+  <title>Ruido Roto front row; moving figure</title>
+  <g transform="translate(20.75 46) scale(2.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+  <rect x="1" y="-1" width="7" height="3" fill="#151412"/>
+  <path d="M1 6 H8 L10 16 H-1 Z" fill="#627b88" stroke="#151412" stroke-width="1"/>
+  <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>
+  <path d="M0 8 L-2 14 M8 8 L12 11" fill="none" stroke="#eee3c5" stroke-width="2"/></g>
 </svg>

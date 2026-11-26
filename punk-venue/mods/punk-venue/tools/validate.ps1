@@ -13,8 +13,8 @@ $scenes = @($originalScenes) + $variants
 $expected = @($scenes)
 $squareHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'square-sha256.json') -Raw | ConvertFrom-Json
 $sceneHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'scene-sha256.json') -Raw | ConvertFrom-Json
-# The generator still owns the original entrance. Only the shipped base omits the walkers.
-$shippedEntranceHash = '3c58b37715eb0a43faf1730cf43055dee97131e85c10ff249127673300daf765'
+# S8 projects nine known figure instances out of the preserved entrance.
+$shippedEntranceHash = '0e78ad1a938b46ca9b4e1c15cc3c3cd8377b98ee721ad91204b40f1eb36198f7'
 # S9 redraw; keep the original crowd SHA-256 in the preservation manifest.
 $authorizedCrowdHash = '8a89c581ff2e1b92f80e18be314090c229c308765f8f5fe8722a83fa7558f1bc'
 if (@(Compare-Object ($originalScenes | Sort-Object) ($sceneHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
@@ -40,16 +40,22 @@ $twoLineNames = @('Los Violadores', 'Todos Tus Muertos', 'Boom Boom Kid', 'Embaj
 $condensedNames = @('Todos Tus Muertos', 'Boom Boom Kid', 'Embajada Boliviana')
 $allBandNames = @($bannerNames.Values | ForEach-Object { $_ } | Where-Object { $_ -ne 'ENTRADA' } | Select-Object -Unique)
 if ($allBandNames.Count -lt 12) { throw 'At least 12 distinct real band names required' }
-$generatedNames = $expected
+$originalGeneratedNames = $expected
 $crowdCutouts = @('crowd-front-punk.svg', 'crowd-front-neighbor.svg')
 $crowdAnchors = @{ punk = 206; neighbor = 243 }
-$additions = @($kinds | ForEach-Object { "$_-strike.svg" }) + $crowdCutouts + @('monitor-riser.svg')
+$queuePoses = @{ drinker = 3; neighbor = 3; seated = 3; punk = 4; doorway = 4 }
+$queueFrames = @(foreach ($pose in $queuePoses.Keys) {
+    for ($frame = 0; $frame -lt $queuePoses[$pose]; $frame++) { "queue-$pose-$frame.svg" }
+})
+$queueWide = @($queueFrames | Where-Object { $_ -like 'queue-doorway-*' }) + @('entrance-foreground.svg')
+$generatedNames = $originalGeneratedNames + $crowdCutouts + $queueFrames + @('entrance-foreground.svg', 'crowd-backplate.svg')
+$additions = @($kinds | ForEach-Object { "$_-strike.svg" }) + @('monitor-riser.svg')
 $walkers = @('punk', 'neighbor')
 $walkFrames = @(foreach ($walker in $walkers) {
     foreach ($frame in 0..3) { "queue-walk-$walker-$frame.svg" }
 })
 $expected = $generatedNames + $additions + $walkFrames
-$squareNames = @($generatedNames | Where-Object { $_ -notin $scenes })
+$squareNames = @($originalGeneratedNames | Where-Object { $_ -notin $scenes })
 if (@(Compare-Object ($squareNames | Sort-Object) ($squareHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Square-asset preservation manifest does not match the 34 expected names'
 }
@@ -58,6 +64,7 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
     $diff = @(Compare-Object ($inventory | Sort-Object) ($files.Name | Sort-Object))
     if ($diff.Count -ne 0) { throw "Wrong asset file set: $($diff | Out-String)" }
     $hashes = @{}
+    $queueGeometry = @{}
     foreach ($file in $files) {
         if ($file.Length -gt 8192) { throw "$($file.Name): exceeds 8 KiB ($($file.Length) bytes)" }
         $settings = New-Object System.Xml.XmlReaderSettings
@@ -69,8 +76,8 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
             $doc.XmlResolver = $null
             $doc.Load($reader)
         } finally { $reader.Dispose() }
-        $width = if ($file.Name -eq 'crowd.svg') { '512' }
-            elseif ($file.Name -in $scenes -or $file.Name -in $walkFrames) { '256' } else { '64' }
+        $width = if ($file.Name -in @('crowd.svg', 'crowd-backplate.svg')) { '512' }
+            elseif ($file.Name -in $scenes -or $file.Name -in $walkFrames -or $file.Name -in $queueWide) { '256' } else { '64' }
         if ($doc.DocumentElement.LocalName -ne 'svg' -or
             $doc.DocumentElement.NamespaceURI -ne 'http://www.w3.org/2000/svg' -or
             $doc.DocumentElement.GetAttribute('viewBox') -cne "0 0 $width 64" -or
@@ -111,12 +118,20 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
                 throw 'crowd.svg: missing invented flag names or incorrect accessible casing'
             }
         }
-        if (($file.Name -eq 'crowd.svg' -or $file.Name -in $crowdCutouts) -and
+        if (($file.Name -in @('crowd.svg', 'crowd-backplate.svg') -or $file.Name -in $crowdCutouts) -and
             $doc.DocumentElement.GetAttribute('shape-rendering') -cne 'crispEdges') {
             throw "$($file.Name): crowd art must use crisp edges"
         }
-        if ($file.Name -in $walkFrames -and $doc.DocumentElement.GetAttribute('shape-rendering') -cne 'crispEdges') {
+        if (($file.Name -in $walkFrames -or $file.Name -in $queueFrames) -and
+            $doc.DocumentElement.GetAttribute('shape-rendering') -cne 'crispEdges') {
             throw "$($file.Name): queue walker must use crisp edges"
+        }
+        if ($file.Name -in $queueFrames) {
+            $shapes = $doc.SelectNodes('//*[local-name()="path" or local-name()="rect" or local-name()="circle" or local-name()="use"]')
+            if (($file.Name -eq 'queue-doorway-3.svg') -ne ($shapes.Count -eq 0)) {
+                throw "$($file.Name): only the doorway's gone pose may be empty"
+            }
+            $queueGeometry[$file.Name] = @($shapes | ForEach-Object { $_.OuterXml }) -join ''
         }
         if ($file.Name -in $variants) {
             # Last-painted solid masks guarantee no later prop/lettering can
@@ -224,12 +239,21 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
             throw "$walker must have four distinct walk frames"
         }
     }
+    foreach ($pose in $queuePoses.Keys) {
+        $frames = @(for ($frame = 0; $frame -lt $queuePoses[$pose]; $frame++) {
+            $name = "queue-$pose-$frame.svg"
+            if ($pose -eq 'doorway') { $hashes[$name] } else { $queueGeometry[$name] }
+        })
+        if (@($frames | Select-Object -Unique).Count -ne $queuePoses[$pose]) {
+            throw "$pose must have $($queuePoses[$pose]) distinct queue frames"
+        }
+    }
     return $hashes
 }
 # Check shipped files before generation, so stale/corrupt delivery is not masked.
 $shipped = Assert-Art $art $expected -ShippedEntrance
-# Generate the original 41 assets plus the two crowd cutouts away from shipped art.
-# Other stage additions and walk frames are validated above, not generated here.
+# Generate 62 assets in scratch, including all 41 originals. The original
+# two walk sets and other stage additions are checked in the shipped inventory.
 $scratch = Join-Path ([IO.Path]::GetTempPath()) ('punk-venue-validate-' + [guid]::NewGuid().ToString('N'))
 $tools = Join-Path $scratch 'tools'
 $generatedArt = Join-Path $scratch 'art'
@@ -240,39 +264,44 @@ try {
     $generator = Join-Path $tools 'generate.mjs'
     & node $generator
     if ($LASTEXITCODE -ne 0) { throw "First generator run exited $LASTEXITCODE" }
-    $first = Assert-Art $generatedArt ($generatedNames + $crowdCutouts)
+    $first = Assert-Art $generatedArt $generatedNames -ShippedEntrance
     & node $generator
     if ($LASTEXITCODE -ne 0) { throw "Second generator run exited $LASTEXITCODE" }
-    $second = Assert-Art $generatedArt ($generatedNames + $crowdCutouts)
+    $second = Assert-Art $generatedArt $generatedNames -ShippedEntrance
     foreach ($name in $generatedNames) {
-        if ($first[$name] -cne $second[$name] -or ($name -ne 'entrance.svg' -and $shipped[$name] -cne $first[$name])) {
-            throw "$name is stale or not byte-identical across regeneration"
-        }
-    }
-    foreach ($name in $crowdCutouts) {
         if ($shipped[$name] -cne $first[$name] -or $first[$name] -cne $second[$name]) {
             throw "$name is stale or not byte-identical across regeneration"
         }
     }
-    # Require byte parity for the shipped entrance as well, after projecting
-    # exactly the two approved use removals onto the preserved generated entrance.
-    $generatedEntrance = [IO.File]::ReadAllText((Join-Path $generatedArt 'entrance.svg'))
-    $projectedEntrance = $generatedEntrance.Replace(('  <use href="#punk" x="145" y="33"/>' + "`n"), '').Replace(
-        ('  <use href="#neighbor" x="220" y="32"/>' + "`n"), '')
+    # Independently prove that the shipped entrance differs from the preserved
+    # generator output by exactly the original T8 and new S8 use removals.
+    & node $generator --preserved-entrance
+    if ($LASTEXITCODE -ne 0) { throw "Preserved entrance generation exited $LASTEXITCODE" }
+    $entrancePath = Join-Path $generatedArt 'entrance.svg'
+    if ((Get-FileHash -LiteralPath $entrancePath -Algorithm SHA256).Hash -ine $sceneHashes.'entrance.svg') {
+        throw 'Preserved entrance changed from its original SHA-256'
+    }
+    $projectedEntrance = [IO.File]::ReadAllText($entrancePath)
+    foreach ($figure in @('punk 145 33', 'neighbor 220 32', 'neighbor 103 30', 'neighbor 169 32',
+        'drinker 9 28', 'drinker 193 33', 'punk 38 29', 'seated 6 37', 'seated 42 37')) {
+        $id, $x, $y = $figure -split ' '
+        $line = '  <use href="#{0}" x="{1}" y="{2}"/>' -f $id, $x, $y
+        $projectedEntrance = $projectedEntrance.Replace(($line + "`n"), '')
+    }
     $expectedEntrance = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($projectedEntrance))
     $actualEntrance = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $art 'entrance.svg')))
     if ($actualEntrance -cne $expectedEntrance) {
-        throw 'entrance.svg differs from regeneration beyond the two authorized queue figure removals'
+        throw 'entrance.svg differs from regeneration beyond the nine authorized queue figure removals'
     }
 } finally {
     Remove-Item -LiteralPath $scratch -Recurse -Force
 }
 $largest = Get-ChildItem -LiteralPath $art -File | Sort-Object Length -Descending | Select-Object -First 1
 Write-Output "PASS: $($expected.Count) XML SVGs; exact filenames, safe local shapes, six-color palette, all under 8 KiB."
-Write-Output "PASS: backdrop/entrance, 4 variants and $($walkFrames.Count) walk frames are 256x64 (4:1); crowd is 512x64 (8:1), all with matching viewBox."
+Write-Output "PASS: wide scenes, $($walkFrames.Count) preserved walk frames and $($queueFrames.Count) new queue poses have matching viewBoxes; crowd and its backplate are 512x64 (8:1)."
 Write-Output "PASS: fallback and 34 square SVGs match preserved SHA-256; crowd and entrance match their authorized updated hashes."
-Write-Output "PASS: 24 larger crowd figures, two anchored face cutouts, exact invented flag names and crisp edges."
+Write-Output "PASS: 24 larger crowd figures, two anchored figure cutouts, exact invented flag names and crisp edges."
 Write-Output "PASS: 13 distinct real band names, exact accessible casing, uppercase shape spelling, no scene repeats; neutral ENTRADA sign."
 Write-Output "PASS: 4 variants reserve dark lower-center musician and bottom-eighth crowd zones."
-Write-Output "PASS: two generator runs are byte-identical (SHA-256, all $($generatedNames.Count) original generated files plus $($crowdCutouts.Count) cutouts); shipped art matches all after the two authorized entrance removals."
+Write-Output "PASS: two generator runs and shipped art are byte-identical (SHA-256, all $($generatedNames.Count) generated files, including all $($originalGeneratedNames.Count) originals). The preserved entrance matches its original SHA-256 and has exactly nine authorized figure removals."
 Write-Output "Largest asset: $($largest.Name), $($largest.Length) bytes."

@@ -2,7 +2,7 @@
 
 Original SVG pixel/stencil art for T2 (S1, S3, S7), with the wide-scene revision
 covering S2-S3 and T7 stage variants covering S11's art increment.
-The 59 shipped assets are in `../art/`; no tooling runs in the mod. No dependencies or network. No fonts, stylesheets, embedded
+The 78 shipped assets are in `../art/`; no tooling runs in the mod. No dependencies or network. No fonts, stylesheets, embedded
 images, external resources, or copied band logos. All assets share six colors.
 The owner-approved S3 lettering increment uses real band names as original
 uppercase stencil shapes, not reproductions of band typography or logos.
@@ -17,16 +17,21 @@ gear assets remain `width="64" height="64" viewBox="0 0 64 64"`, byte-identical
 to their pre-revision versions. Scenes are recomposed across the wide canvas,
 not horizontally stretched square art.
 
-Regenerate just the crowd strip and its two cutouts from the repository root:
+Regenerate the crowd strip, its runtime backplate and its two cutouts from the repository root:
 
 ```sh
 node punk-venue/mods/punk-venue/tools/generate.mjs --crowd-only
 ```
 
-The full generator (without `--crowd-only`) writes the original 41 files plus
-both crowd cutouts. Run the validator for full regeneration in scratch: running
-the full generator directly would restore two static walkers to the shipped
-entrance, where those figures must be separate animated layers.
+Regenerate all 62 generator-owned assets, including the shipping entrance
+and its overlays, from the repository root:
+
+```sh
+node punk-venue/mods/punk-venue/tools/generate.mjs
+```
+
+`--preserved-entrance` is for validation in scratch only: it writes the
+reference entrance with its nine static people, not the shipping version.
 
 Run the banner layout and entrance queue timer tests directly with Node:
 
@@ -36,8 +41,9 @@ node --test punk-venue/mods/punk-venue/tools/queue-walk.test.mjs
 ```
 
 The queue test drives the mod's timer callback with stubbed layout and agent
-inputs. It checks frame order, timer reuse, notifications, cancellation, and
-the one-tick paint lease without launching Herdr or judging visual quality.
+inputs. It checks each person's rendered frames, distinct phases and cadences,
+the doorway's gone/return sequence, timer reuse, notifications, five cancellation
+paths, and the full-size no-click crowd overlays without launching Herdr.
 
 XML and deterministic-regeneration validation on Windows, using built-in .NET:
 
@@ -46,9 +52,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File punk-venue/mods/punk-venue/t
 ```
 
 The validator first runs eight deterministic Node layout tests and checks the
-59 shipped assets, then runs the generator twice in system temp and compares
-all three SHA-256 snapshots for the original 41 files and both crowd cutouts.
-The entrance comparison applies exactly the two authorized walker removals. It checks the exact filename set,
+78 shipped assets, then runs the generator twice in system temp and compares
+all three SHA-256 snapshots for all 62 generated files, including the original
+41. It independently regenerates the preserved entrance, checks its original
+hash, and applies exactly nine authorized figure removals (two T8, seven S8)
+to match the shipped entrance byte for byte. It checks the exact filename set,
 XML parsing with DTDs prohibited and resolution disabled, SVG namespace,
 dimensions/viewBox, an element/attribute allowlist, palette, distinct state
 files, and the 8 KiB budget. Scene-local `defs`/`use` reuse deterministic shape
@@ -83,7 +91,9 @@ not judge visual quality.
 
 - `backdrop.svg` (generic fallback), `crowd.svg` (larger front row), `entrance.svg` (neutral shared entrance)
 - `crowd-front-punk.svg` and `crowd-front-neighbor.svg` (generated overlays), `monitor-riser.svg`
-- Seven `*-strike.svg` musician poses and eight `queue-walk-{punk,neighbor}-*.svg` entrance frames
+- `crowd-backplate.svg` and `entrance-foreground.svg` (generated)
+- Seven `*-strike.svg` musician poses and eight preserved `queue-walk-{punk,neighbor}-*.svg` entrance frames
+- Seventeen generated `queue-{doorway,drinker,neighbor,punk,seated}-*.svg` entrance poses
 - `backdrop-club.svg`, `backdrop-galpon.svg`, `backdrop-plaza.svg`, `backdrop-salon.svg`
 - `guitar-working.svg`, `guitar-idle.svg`, `guitar-blocked.svg`, `guitar-done.svg`
 - `bass-working.svg`, `bass-idle.svg`, `bass-blocked.svg`, `bass-done.svg`
@@ -138,15 +148,26 @@ These are composition and geometry expectations, not a new optical review.
   there is room for faces, mohawks, raised fists and bent bottle-holding arms.
   Both invented flags and their uppercase stencils remain unobstructed.
   Their roughly 6-pixel-high lettering is still poster texture at this size.
-  The square cutouts sit on the same front-row faces at x=206 and x=243.
-  Their fixed display box is smaller than one enlarged head at a 4:1 stage,
-  so they animate inset face details rather than redraw a whole head and arm.
-  The strip keeps the full silhouettes and raised arms.
+  The two cutouts are 64-unit square crops at the strip's 1:1 art scale,
+  centered on the same front-row faces at x=206 and x=243. They show the whole
+  figure down to the original hem, with a 0.5–2 unit upward offset for the
+  punk (1120 ms loop) and 0.5–3 units for the neighbor (1730 ms). The runtime
+  backplate omits those two fixed silhouettes so they do not double; the
+  preserved `crowd.svg` still contains all 24 figures.
 - **entrance:** a cream/red entrance and neutral ENTRADA sign sit left of
   center, with a small Alerta Roja pasted poster and a queue stretching right.
-  Standing drinkers and two seated neighbors occupy the left pavement, so
-  the entire strip works alone as the idle scene. The roof, wall, step and
-  pavement fill the canvas without needing stage or audience overlays.
+  The scene adds nine animated people to the generated base. The original
+  punk walks every 100 ms, and the original neighbor walks with holds of
+  100/100/200/100 ms. The other punk has four 200 ms poses; the barrier
+  neighbor has three 300 ms poses. The left and right drinkers share three
+  poses with holds of 400/400/400 and 300/400/500 ms; the two seated figures
+  share three poses with holds of 600/600/600 and 500/600/700 ms. Both pairs
+  start out of phase and never share a pose on any tick.
+  The doorway figure is the original neighbor at (103,30): in an 8 s cycle
+  it stands for 2.3 s, takes two 300 ms steps inward, disappears for 1.7 s,
+  reverses those steps, then stands for 2.8 s before the cycle repeats.
+  All poses stay inside the opening. A foreground layer restores the barrier,
+  the bottle and the Alerta Roja poster over the figures.
 
 ## T7 venue variants at 400 x 100
 

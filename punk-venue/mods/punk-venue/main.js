@@ -26,8 +26,33 @@ const art = name => image(`mods/punk-venue/art/${name}.svg`);
 const STEP_PERIOD = 800;
 const IDLE_PERIOD = 1800;
 const WALK_TICK = 100;
-const WALK_FRAMES = 4;
-const WALKERS = ["punk", "neighbor"];
+// A pose's hold and a person's phase are measured in 100 ms ticks. The shared
+// drinker/seated pairs use staggered holds so they never show the same pose.
+const queuePerson = (id, asset, holds, phase = 0, position, sequence = holds.map((_hold, i) => i)) => ({
+  id, asset, phase, position, holds, sequence,
+  period: holds.reduce((sum, hold) => sum + hold, 0),
+  frames: [...new Set(sequence)],
+});
+const ENTRANCE_PEOPLE = [
+  queuePerson("doorway", "queue-doorway", [23, 3, 3, 17, 3, 3, 28], 0, null, [0, 1, 2, 3, 2, 1, 0]),
+  queuePerson("left-drinker", "queue-drinker", [4, 4, 4], 0, [9, 28]),
+  queuePerson("left-punk", "queue-punk", [2, 2, 2, 2], 3, [38, 29]),
+  queuePerson("walking-punk", "queue-walk-punk", [1, 1, 1, 1]),
+  queuePerson("barrier-neighbor", "queue-neighbor", [3, 3, 3], 4, [169, 32]),
+  queuePerson("right-drinker", "queue-drinker", [3, 4, 5], 5, [193, 33]),
+  queuePerson("walking-neighbor", "queue-walk-neighbor", [1, 1, 2, 1], 1),
+  queuePerson("left-seated", "queue-seated", [6, 6, 6], 0, [6, 37]),
+  queuePerson("right-seated", "queue-seated", [5, 6, 7], 8, [42, 37]),
+];
+const entranceFrames = tick => ENTRANCE_PEOPLE.map(({ holds, period, phase, sequence }) => {
+  let elapsed = (tick + phase) % period;
+  const pose = holds.findIndex(hold => {
+    if (elapsed < hold) return true;
+    elapsed -= hold;
+    return false;
+  });
+  return sequence[pose];
+});
 // As in World of Codecraft's place.hidden(), use the shown Herdr layout;
 // an absent block, hidden ancestor or inactive stack child isn't drawn.
 const venueVisible = node => {
@@ -245,8 +270,10 @@ export default class PunkVenue extends View {
         return;
       }
       this.queueWalkRendered = false;
-      this.queueWalkFrame = ((this.queueWalkFrame ?? 0) + 1) % WALK_FRAMES;
-      cx.notify();
+      const previous = this.queueWalkFrames ?? entranceFrames(0);
+      this.queueWalkTick = (this.queueWalkTick ?? 0) + 1;
+      this.queueWalkFrames = entranceFrames(this.queueWalkTick);
+      if (this.queueWalkFrames.some((frame, i) => frame !== previous[i])) cx.notify();
     });
   }
 
@@ -335,16 +362,16 @@ export default class PunkVenue extends View {
       return children;
     };
     const crowdCutouts = () => {
-      // Keep both sweeps below the figure boxes and inside the static strip.
-      const clearance = Math.min(sceneHeight - (figureTop + figure + 3), Math.round(artWidth / 8));
-      const size = clearance * 0.7;
-      if (size <= 0) return [];
-      const bob = Math.min(5, size / 6);
-      const top = sceneHeight - size - bob;
+      const unit = artWidth / 512;
+      if (unit <= 0) return [];
+      // Each square uses 64 native crowd units and starts three units below
+      // the strip's top. Lower bodies continue past its hem and are clipped
+      // by the scene, so the bob doesn't uncover the bottom of a cutout.
+      const size = 64 * unit;
+      const top = sceneHeight - 61 * unit;
       return ["punk", "neighbor"].map((name, i) => {
-        const offset = Math.sin((i - 0.5) * Math.PI) * bob;
-        const from = top + offset / 3;
-        const to = top + offset;
+        const from = top - (i ? 0.5 : 2) * unit;
+        const to = top - (i ? 3 : 0.5) * unit;
         return art(`crowd-front-${name}`).absolute()
           .left(artLeft + artWidth * (i ? 243 : 206) / 512 - size / 2).top(from).w(size).h(size)
           .loop("top", { from, to, period: i ? 1730 : 1120 });
@@ -360,15 +387,27 @@ export default class PunkVenue extends View {
     const washSides = [56, 178];
     const entrance = !members.length;
     this.syncQueueWalk(cx, entrance && artWidth > 0 && artHeight > 0);
-    // Every walk frame uses the entrance's full viewBox to keep the original
-    // pixel scale and placement at any pane width. Stack frames for preloading.
     const entranceLayer = name => art(name).absolute().left(artLeft).top(0).w(artWidth).h(artHeight);
+    const entrancePeople = () => {
+      const frames = this.queueWalkFrames ?? entranceFrames(0);
+      const unit = artWidth / 256;
+      return ENTRANCE_PEOPLE.map(({ id, asset, position, frames: poses }, index) => {
+        const [x, y] = position ?? [0, 0];
+        const left = position ? artLeft + (x - 4) * unit : artLeft;
+        const top = position ? (y - 10) * unit : 0;
+        const width = position ? 64 * unit : artWidth;
+        const height = position ? 64 * unit : artHeight;
+        // Stack the frames for preloading; only the selected pose is visible.
+        return div().id(`entrance-person-${id}`).absolute().left(left).top(top).w(width).h(height)
+          .children(poses.map(pose =>
+            art(`${asset}-${pose}`).absolute().left(0).top(0).w(width).h(height).opacity(pose === frames[index] ? 1 : 0)));
+      });
+    };
     // Fixed scene box: entrance and stage share geometry. Working and idle figures
     // swap poses in place; GPUI loops run only while their elements are drawn.
     const scene = div().id("venue-scene").relative().w_full().h(sceneHeight).flex_none().overflow_hidden().bg(t.canvas)
       .when(entrance, el => el.child(entranceLayer("entrance"))
-        .children(WALKERS.flatMap(walker => Array.from({ length: WALK_FRAMES }, (_, i) =>
-          entranceLayer(`queue-walk-${walker}-${i}`).opacity(i === (this.queueWalkFrame ?? 0) ? 1 : 0)))))
+        .children(entrancePeople()).child(entranceLayer("entrance-foreground")))
       .when(members.length, el => el
         .child(art(`backdrop-${stageOf(space?.id)}`).absolute().left(artLeft).top(0).w(artWidth).h(artHeight))
         .children([0, 1].map(i => div().id(`light-${i}`).absolute().left(artLeft + (i ? artWidth * 0.85 : artWidth * 0.08)).top(4).w(7).h(7).rounded_full()
@@ -406,7 +445,7 @@ export default class PunkVenue extends View {
               .on_click(() => run("terminal.peek", { terminal: g.address }))
               .child(art(`${["guitar2", "keys", "sax"][i]}-${pose}`).w(size).h(size));
           })))
-        .child(art("crowd").absolute().left(artLeft).bottom(0).w(artWidth).h(Math.max(8, Math.round(artWidth / 8))))
+        .child(art("crowd-backplate").absolute().left(artLeft).bottom(0).w(artWidth).h(Math.max(8, Math.round(artWidth / 8))))
         .children(crowdCutouts()));
     const marquee = () => {
       const label = String(this.phase ?? this.feedState).toUpperCase();
