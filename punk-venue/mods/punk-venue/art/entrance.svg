@@ -45,10 +45,8 @@
   <rect x="82" y="54" width="50" height="3" fill="#627b88"/>
   <path d="M145 37 V57 M243 37 V57 M145 39 H243" fill="none" stroke="#c4a34f" stroke-width="2"/>
   <use href="#neighbor" x="103" y="30"/>
-  <use href="#punk" x="145" y="33"/>
   <use href="#neighbor" x="169" y="32"/>
   <use href="#drinker" x="193" y="33"/>
-  <use href="#neighbor" x="220" y="32"/>
   <use href="#drinker" x="9" y="28"/>
   <use href="#punk" x="38" y="29"/>
   <rect x="4" y="49" width="58" height="3" fill="#c4a34f"/>

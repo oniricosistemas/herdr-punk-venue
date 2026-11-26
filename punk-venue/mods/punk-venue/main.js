@@ -1,6 +1,6 @@
 import { View, div, image } from "gpui-kit";
 import { h_flex, v_flex, ScrollHandle } from "gpui-base";
-import { spaces, agents, terminals, theme, run, nextCommand, checking, setAgentOrder, exec, home, watchFolder } from "herdr";
+import { spaces, agents, terminals, theme, run, nextCommand, checking, setAgentOrder, exec, home, watchFolder, layout } from "herdr";
 
 const PAGE = 12;
 const LANES = ["Cartelera", "Escena", "Banda"];
@@ -25,6 +25,16 @@ const stateText = status => status ?? "no reporting agents";
 const art = name => image(`mods/punk-venue/art/${name}.svg`);
 const STEP_PERIOD = 800;
 const IDLE_PERIOD = 1800;
+const WALK_TICK = 100;
+const WALK_FRAMES = 4;
+const WALKERS = ["punk", "neighbor"];
+// As in World of Codecraft's place.hidden(), use the shown Herdr layout;
+// an absent block, hidden ancestor or inactive stack child isn't drawn.
+const venueVisible = node => {
+  if (!node || node.hidden) return false;
+  if (node.id === "node-map") return node.content?.mod === "punk-venue";
+  return node.children?.some(child => (node.type !== "stack" || child.id === node.active) && venueVisible(child)) ?? false;
+};
 // As in Fellowship, crossing past 0..1 makes the linear opacity swap crisp.
 const SWAP_LOW = -6;
 const SWAP_HIGH = 7;
@@ -207,7 +217,40 @@ export default class PunkVenue extends View {
     cx.notify();
   }
 
-  render() {
+  stopQueueWalk() {
+    this.queueWalkTimer?.cancel();
+    this.queueWalkTimer = null;
+    this.queueWalkRendered = false;
+  }
+
+  syncQueueWalk(cx, drawEntrance) {
+    if (!drawEntrance || checking() || !venueVisible(layout())) {
+      this.stopQueueWalk();
+      return;
+    }
+    // A render renews one tick. If drawing stops without the layout changing,
+    // don't keep the timer alive on the strength of its own notifications.
+    this.queueWalkRendered = true;
+    if (this.queueWalkTimer) return;
+    this.queueWalkTimer = cx.timer.every(WALK_TICK, cx => {
+      if (!this.queueWalkRendered || !venueVisible(layout())) {
+        this.stopQueueWalk();
+        return;
+      }
+      // Herdr may switch spaces/agents between renders. Recheck the live inputs
+      // without rebuilding the snapshot or running its list side effects.
+      const active = spaces().find(space => space.active);
+      if (active && agents().some(agent => agent.space === active.id)) {
+        this.stopQueueWalk();
+        return;
+      }
+      this.queueWalkRendered = false;
+      this.queueWalkFrame = ((this.queueWalkFrame ?? 0) + 1) % WALK_FRAMES;
+      cx.notify();
+    });
+  }
+
+  render(cx) {
     // Reads start from the first render, so a reused mod instance still picks up the feed.
     if (!this.readStarted && !this.reading && !checking()) {
       this.readStarted = true;
@@ -315,10 +358,17 @@ export default class PunkVenue extends View {
     const washTop = Math.max(22, washY(18));
     const washHeight = Math.max(0, Math.min(washY(4), figureTop - 1 - washTop));
     const washSides = [56, 178];
+    const entrance = !members.length;
+    this.syncQueueWalk(cx, entrance && artWidth > 0 && artHeight > 0);
+    // Every walk frame uses the entrance's full viewBox to keep the original
+    // pixel scale and placement at any pane width. Stack frames for preloading.
+    const entranceLayer = name => art(name).absolute().left(artLeft).top(0).w(artWidth).h(artHeight);
     // Fixed scene box: entrance and stage share geometry. Working and idle figures
     // swap poses in place; GPUI loops run only while their elements are drawn.
     const scene = div().id("venue-scene").relative().w_full().h(sceneHeight).flex_none().overflow_hidden().bg(t.canvas)
-      .when(!members.length, el => el.child(art("entrance").absolute().left(artLeft).top(0).w(artWidth).h(Math.round(artWidth / 4))))
+      .when(entrance, el => el.child(entranceLayer("entrance"))
+        .children(WALKERS.flatMap(walker => Array.from({ length: WALK_FRAMES }, (_, i) =>
+          entranceLayer(`queue-walk-${walker}-${i}`).opacity(i === (this.queueWalkFrame ?? 0) ? 1 : 0)))))
       .when(members.length, el => el
         .child(art(`backdrop-${stageOf(space?.id)}`).absolute().left(artLeft).top(0).w(artWidth).h(artHeight))
         .children([0, 1].map(i => div().id(`light-${i}`).absolute().left(artLeft + (i ? artWidth * 0.85 : artWidth * 0.08)).top(4).w(7).h(7).rounded_full()

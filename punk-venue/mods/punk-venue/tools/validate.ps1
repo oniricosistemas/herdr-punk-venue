@@ -13,6 +13,8 @@ $scenes = @($originalScenes) + $variants
 $expected = @($scenes)
 $squareHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'square-sha256.json') -Raw | ConvertFrom-Json
 $sceneHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'scene-sha256.json') -Raw | ConvertFrom-Json
+# The generator still owns the original entrance. Only the shipped base omits the walkers.
+$shippedEntranceHash = '3c58b37715eb0a43faf1730cf43055dee97131e85c10ff249127673300daf765'
 if (@(Compare-Object ($originalScenes | Sort-Object) ($sceneHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Original-scene preservation manifest must contain exactly the 3 original scenes'
 }
@@ -39,12 +41,16 @@ if ($allBandNames.Count -lt 12) { throw 'At least 12 distinct real band names re
 $generatedNames = $expected
 $additions = @($kinds | ForEach-Object { "$_-strike.svg" }) + @(
     'crowd-front-punk.svg', 'crowd-front-neighbor.svg', 'monitor-riser.svg')
-$expected = $generatedNames + $additions
+$walkers = @('punk', 'neighbor')
+$walkFrames = @(foreach ($walker in $walkers) {
+    foreach ($frame in 0..3) { "queue-walk-$walker-$frame.svg" }
+})
+$expected = $generatedNames + $additions + $walkFrames
 $squareNames = @($generatedNames | Where-Object { $_ -notin $scenes })
 if (@(Compare-Object ($squareNames | Sort-Object) ($squareHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Square-asset preservation manifest does not match the 34 expected names'
 }
-function Assert-Art($directory, $inventory) {
+function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
     $files = @(Get-ChildItem -LiteralPath $directory -File)
     $diff = @(Compare-Object ($inventory | Sort-Object) ($files.Name | Sort-Object))
     if ($diff.Count -ne 0) { throw "Wrong asset file set: $($diff | Out-String)" }
@@ -61,13 +67,16 @@ function Assert-Art($directory, $inventory) {
             $doc.Load($reader)
         } finally { $reader.Dispose() }
         $width = if ($file.Name -eq 'crowd.svg') { '512' }
-            elseif ($file.Name -in $scenes) { '256' } else { '64' }
+            elseif ($file.Name -in $scenes -or $file.Name -in $walkFrames) { '256' } else { '64' }
         if ($doc.DocumentElement.LocalName -ne 'svg' -or
             $doc.DocumentElement.NamespaceURI -ne 'http://www.w3.org/2000/svg' -or
             $doc.DocumentElement.GetAttribute('viewBox') -cne "0 0 $width 64" -or
             $doc.DocumentElement.GetAttribute('width') -cne $width -or
             $doc.DocumentElement.GetAttribute('height') -cne '64') {
             throw "$($file.Name): wrong SVG root, namespace, dimensions or viewBox"
+        }
+        if ($file.Name -in $walkFrames -and $doc.DocumentElement.GetAttribute('shape-rendering') -cne 'crispEdges') {
+            throw "$($file.Name): queue walker must use crisp edges"
         }
         if ($file.Name -in $variants) {
             # Last-painted solid masks guarantee no later prop/lettering can
@@ -138,7 +147,8 @@ function Assert-Art($directory, $inventory) {
             foreach ($attribute in $element.Attributes) {
                 if ($attribute.Name -notin $attributes) { throw "$($file.Name): forbidden attribute $($attribute.Name)" }
                 if ($attribute.Name -in @('fill', 'stroke') -and
-                    $attribute.Value -ne 'none' -and $attribute.Value -notin $palette) {
+                    $attribute.Value -ne 'none' -and ($attribute.Value -notin $palette -or
+                    ($file.Name -in $walkFrames -and $attribute.Value -eq '#385947'))) {
                     throw "$($file.Name): out-of-palette color $($attribute.Value)"
                 }
                 if ($attribute.Name -eq 'href' -and
@@ -155,20 +165,30 @@ function Assert-Art($directory, $inventory) {
         if ($file.Name -in $squareNames -and $hashes[$file.Name] -ine $squareHashes.($file.Name)) {
             throw "$($file.Name): square asset changed from its pre-revision SHA-256"
         }
-        if ($file.Name -in $originalScenes -and $hashes[$file.Name] -ine $sceneHashes.($file.Name)) {
-            throw "$($file.Name): original scene changed from its pre-variant SHA-256"
+        if ($file.Name -in $originalScenes) {
+            $authorized = if ($ShippedEntrance -and $file.Name -eq 'entrance.svg') { $shippedEntranceHash }
+                else { $sceneHashes.($file.Name) }
+            if ($hashes[$file.Name] -ine $authorized) {
+                throw "$($file.Name): original scene changed from its authorized SHA-256"
+            }
         }
     }
     foreach ($kind in $kinds) {
         $unique = @($states | ForEach-Object { $hashes["$kind-$_.svg"] } | Select-Object -Unique)
         if ($unique.Count -ne 4) { throw "$kind has duplicate states" }
     }
+    foreach ($walker in $walkers) {
+        $frames = @(0..3 | ForEach-Object { $hashes["queue-walk-$walker-$_.svg"] } | Where-Object { $_ })
+        if ($frames.Count -ne 0 -and @($frames | Select-Object -Unique).Count -ne 4) {
+            throw "$walker must have four distinct walk frames"
+        }
+    }
     return $hashes
 }
 # Check shipped files before generation, so stale/corrupt delivery is not masked.
-$shipped = Assert-Art $art $expected
+$shipped = Assert-Art $art $expected -ShippedEntrance
 # The original generator owns 41 assets. Run it away from the shipped art;
-# the ten live-stage additions are validated above, not produced by this tool.
+# stage additions and walk frames are validated above, not produced by this tool.
 $scratch = Join-Path ([IO.Path]::GetTempPath()) ('punk-venue-validate-' + [guid]::NewGuid().ToString('N'))
 $tools = Join-Path $scratch 'tools'
 $generatedArt = Join-Path $scratch 'art'
@@ -184,18 +204,28 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Second generator run exited $LASTEXITCODE" }
     $second = Assert-Art $generatedArt $generatedNames
     foreach ($name in $generatedNames) {
-        if ($shipped[$name] -cne $first[$name] -or $first[$name] -cne $second[$name]) {
+        if ($first[$name] -cne $second[$name] -or ($name -ne 'entrance.svg' -and $shipped[$name] -cne $first[$name])) {
             throw "$name is stale or not byte-identical across regeneration"
         }
+    }
+    # Require byte parity for the shipped entrance as well, after projecting
+    # exactly the two approved use removals onto the preserved generated entrance.
+    $generatedEntrance = [IO.File]::ReadAllText((Join-Path $generatedArt 'entrance.svg'))
+    $projectedEntrance = $generatedEntrance.Replace(('  <use href="#punk" x="145" y="33"/>' + "`n"), '').Replace(
+        ('  <use href="#neighbor" x="220" y="32"/>' + "`n"), '')
+    $expectedEntrance = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($projectedEntrance))
+    $actualEntrance = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $art 'entrance.svg')))
+    if ($actualEntrance -cne $expectedEntrance) {
+        throw 'entrance.svg differs from regeneration beyond the two authorized queue figure removals'
     }
 } finally {
     Remove-Item -LiteralPath $scratch -Recurse -Force
 }
 $largest = Get-ChildItem -LiteralPath $art -File | Sort-Object Length -Descending | Select-Object -First 1
 Write-Output "PASS: $($expected.Count) XML SVGs; exact filenames, safe local shapes, six-color palette, all under 8 KiB."
-Write-Output "PASS: backdrop/entrance and 4 variants are 256x64 (4:1); crowd is 512x64 (8:1), all with matching viewBox."
+Write-Output "PASS: backdrop/entrance, 4 variants and $($walkFrames.Count) walk frames are 256x64 (4:1); crowd is 512x64 (8:1), all with matching viewBox."
 Write-Output "PASS: fallback/crowd and 34 square SVGs match preserved SHA-256; entrance matches its authorized updated hash."
 Write-Output "PASS: 13 distinct real band names, exact accessible casing, uppercase shape spelling, no scene repeats; neutral ENTRADA sign."
 Write-Output "PASS: 4 variants reserve dark lower-center musician and bottom-eighth crowd zones."
-Write-Output "PASS: shipped art and two generator runs are byte-identical (SHA-256, all $($generatedNames.Count) generated files)."
+Write-Output "PASS: two generator runs are byte-identical (SHA-256, all $($generatedNames.Count) generated files); shipped art matches all after the two authorized entrance removals."
 Write-Output "Largest asset: $($largest.Name), $($largest.Length) bytes."
