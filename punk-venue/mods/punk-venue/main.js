@@ -406,7 +406,7 @@ export default class PunkVenue extends View {
             art(`${asset}-${pose}`).absolute().left(0).top(0).w(width).h(height).opacity(pose === frames[index] ? 1 : 0)));
       });
     };
-    // Fixed scene box: entrance and stage share geometry. Working and idle figures
+    // Fixed scene box: entrance and stage share geometry. Only working figures
     // swap poses in place; GPUI loops run only while their elements are drawn.
     const scene = div().id("venue-scene").relative().w_full().h(sceneHeight).flex_none().overflow_hidden().bg(t.canvas)
       .when(entrance, el => el.child(entranceLayer("entrance"))

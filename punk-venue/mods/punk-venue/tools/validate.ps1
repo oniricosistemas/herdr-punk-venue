@@ -17,6 +17,9 @@ $sceneHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'scene-sha256.j
 $shippedEntranceHash = '0e78ad1a938b46ca9b4e1c15cc3c3cd8377b98ee721ad91204b40f1eb36198f7'
 # S9 redraw with 12-unit heads, now without the two flags. Keep the original manifest hash.
 $authorizedCrowdHash = 'ca6252a00b737c43d22855f20141f6cc327f85c11a781a950c2e64fe1e13d861'
+# The flags' removal lives in the backplate too, and it is not one of the 3 preserved
+# scenes, so it needs its own pin: a flag merged into the hem would otherwise pass.
+$authorizedBackplateHash = 'adcef2bea8d0f88fa100229abea00f76014f6318aa607860513f15b7a4bed01e'
 if (@(Compare-Object ($originalScenes | Sort-Object) ($sceneHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Original-scene preservation manifest must contain exactly the 3 original scenes'
 }
@@ -223,6 +226,9 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
         $hashes[$file.Name] = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash
         if ($file.Name -in $squareNames -and $hashes[$file.Name] -ine $squareHashes.($file.Name)) {
             throw "$($file.Name): square asset changed from its pre-revision SHA-256"
+        }
+        if ($file.Name -eq 'crowd-backplate.svg' -and $hashes[$file.Name] -ine $authorizedBackplateHash) {
+            throw "$($file.Name): crowd backplate changed from its authorized SHA-256"
         }
         if ($file.Name -in $originalScenes) {
             $authorized = if ($ShippedEntrance -and $file.Name -eq 'entrance.svg') { $shippedEntranceHash }
