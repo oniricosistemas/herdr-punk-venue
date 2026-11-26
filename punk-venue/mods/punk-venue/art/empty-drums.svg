@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Unoccupied drum kit and stool; no person</title>
+  <rect x="27" y="24" width="10" height="3" fill="#627b88"/>
+  <path d="M30 27 V33 M35 27 V33" fill="none" stroke="#627b88" stroke-width="2"/>
+  <path d="M13 32 V56 M6 57 L13 53 L20 57 M51 29 V56 M45 57 L51 53 L57 57" fill="none" stroke="#eee3c5" stroke-width="2"/>
+  <path d="M4 31 L21 29 L23 32 L5 34 Z M43 27 L59 29 L58 31 L42 30 Z" fill="#c4a34f" stroke="#151412" stroke-width="1"/>
+  <rect x="15" y="35" width="12" height="9" fill="#b93b36"/>
+  <rect x="38" y="34" width="12" height="10" fill="#b93b36"/>
+  <rect x="15" y="35" width="12" height="2" fill="#eee3c5"/>
+  <rect x="38" y="34" width="12" height="2" fill="#eee3c5"/>
+  <circle cx="32" cy="48" r="12" fill="#eee3c5"/>
+  <circle cx="32" cy="48" r="10" fill="#b93b36"/>
+  <circle cx="32" cy="48" r="6" fill="#151412"/>
+  <path d="M28 45 L36 51 M29 52 L35 44" fill="none" stroke="#eee3c5" stroke-width="2"/>
+  <path d="M22 55 L19 60 M42 55 L45 60" fill="none" stroke="#eee3c5" stroke-width="2"/>
+</svg>

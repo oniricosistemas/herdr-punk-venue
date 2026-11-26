@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Unoccupied keyboard and stool; no person</title>
+  <rect x="26" y="26" width="12" height="3" fill="#627b88"/>
+  <path d="M28 29 V34 M36 29 V34" fill="none" stroke="#627b88" stroke-width="2"/>
+  <path d="M19 43 L44 59 M45 43 L21 59" fill="none" stroke="#eee3c5" stroke-width="2"/>
+  <path d="M13 36 L51 36 L53 44 L11 44 Z" fill="#627b88" stroke="#151412" stroke-width="1"/>
+  <rect x="14" y="39" width="36" height="4" fill="#eee3c5"/>
+  <rect x="18" y="39" width="2" height="3" fill="#151412"/>
+  <rect x="22" y="39" width="2" height="3" fill="#151412"/>
+  <rect x="28" y="39" width="2" height="3" fill="#151412"/>
+  <rect x="32" y="39" width="2" height="3" fill="#151412"/>
+  <rect x="36" y="39" width="2" height="3" fill="#151412"/>
+  <rect x="42" y="39" width="2" height="3" fill="#151412"/>
+  <rect x="46" y="39" width="2" height="3" fill="#151412"/>
+  <rect x="15" y="37" width="5" height="1" fill="#b93b36"/>
+  <rect x="45" y="37" width="4" height="1" fill="#c4a34f"/>
+</svg>

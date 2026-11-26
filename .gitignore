@@ -1,0 +1,6 @@
+# Iteration screenshots stay as local evidence, not history.
+/*.png
+
+# Scratch and disposable probes.
+/.scratch/
+/probe/

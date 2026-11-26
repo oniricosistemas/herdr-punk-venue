@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <title>Punk Venue — illustrative composition, not a live screenshot</title>
+  <desc>DestorDev header, shipped tabs, and a three-column venue panel: poster board of spaces, stage with band and audience, and the band list. Active terminal below.</desc>
+  <rect width="1200" height="800" fill="#100f0e"/>
+  <g stroke="#3f372c" stroke-width="1">
+    <path fill="#1c1a17" d="M0 0h176v800H0zM176 0h1024v42H176zM176 772h1024v28H176z"/>
+    <rect x="184" y="50" width="1008" height="280" rx="4" fill="#100f0e"/>
+    <rect x="184" y="338" width="1008" height="426" rx="4" fill="#151412" stroke="#c4a34f"/>
+  </g>
+  <g font-family="Segoe UI, sans-serif" font-size="12" fill="#eee3c5">
+    <text x="12" y="27" font-family="Consolas, monospace" font-size="13" font-weight="700" fill="#f9f803c0">DestorDev</text>
+    <text x="150" y="27" fill="#b3a992">◧</text>
+    <text x="192" y="76" font-weight="600" fill="#c4a34f">PUNK VENUE</text>
+    <rect x="1080" y="60" width="94" height="24" rx="3" fill="#1c1a17" stroke="#3f372c"/>
+    <text x="1089" y="76" fill="#c4a34f" font-size="11">Herdr / main</text>
+    <g font-size="11" fill="#c4a34f"><text x="196" y="104">Cartelera</text><text x="512" y="104">Escena</text><text x="836" y="104">Banda</text></g>
+    <!-- Cartelera -->
+    <g>
+      <rect x="192" y="112" width="292" height="74" rx="3" fill="#4a3b2c" stroke="#c4a34f" stroke-width="2"/>
+      <text x="202" y="130" font-size="9" fill="#c4a34f">FECHA / PUNK VENUE</text>
+      <text x="202" y="148" font-weight="600">◆ general</text>
+      <text x="202" y="164" font-size="10" fill="#b3a992">192.168.1.192 / 2 tabs</text>
+      <text x="202" y="180" font-size="10" fill="#c4a34f">working</text>
+      <rect x="192" y="194" width="292" height="74" rx="3" fill="#232019" stroke="#3f372c"/>
+      <text x="202" y="212" font-size="9" fill="#c4a34f">FECHA / PUNK VENUE</text>
+      <text x="202" y="230" font-weight="600">◇ Notebook</text>
+      <text x="202" y="246" font-size="10" fill="#b3a992">local / 1 tabs</text>
+      <text x="202" y="262" font-size="10" fill="#8c8271">idle</text>
+      <text x="196" y="292" font-size="11" fill="#c4a34f">‹　1/2　›</text>
+    </g>
+    <!-- Escena -->
+    <g>
+      <rect x="508" y="112" width="300" height="150" rx="3" fill="#100f0e" stroke="#3f372c"/>
+      <rect x="508" y="112" width="300" height="112" fill="#1c1a17"/>
+      <g stroke="#3f372c"><path d="M508 146h300M508 180h300M560 112v112M640 112v112M720 112v112"/></g>
+      <rect x="520" y="120" width="52" height="14" fill="#b93b36"/>
+      <text x="524" y="130" font-size="8" fill="#eee3c5">BARRO SUR</text>
+      <rect x="740" y="120" width="56" height="14" fill="#385947"/>
+      <text x="744" y="130" font-size="8" fill="#eee3c5">RUIDO ROTO</text>
+      <g fill="#eee3c5">
+        <circle cx="560" cy="204" r="7"/><circle cx="612" cy="204" r="7"/><circle cx="664" cy="204" r="7"/><circle cx="716" cy="204" r="7"/>
+      </g>
+      <g stroke="#c4a34f" stroke-width="2" fill="none"><path d="M552 214v-8M620 214v-8M672 214v-8M724 214v-8"/></g>
+      <circle cx="540" cy="132" r="3" fill="#c4a34f"/><circle cx="776" cy="132" r="3" fill="#c4a34f"/>
+      <g fill="#b3a992"><circle cx="530" cy="240" r="4"/><circle cx="548" cy="242" r="4"/><circle cx="566" cy="239" r="4"/><circle cx="586" cy="242" r="4"/><circle cx="604" cy="240" r="4"/><circle cx="624" cy="242" r="4"/><circle cx="642" cy="239" r="4"/><circle cx="662" cy="242" r="4"/><circle cx="680" cy="240" r="4"/><circle cx="700" cy="242" r="4"/><circle cx="718" cy="239" r="4"/><circle cx="738" cy="242" r="4"/><circle cx="756" cy="240" r="4"/><circle cx="774" cy="242" r="4"/></g>
+      <text x="512" y="278" font-size="10" fill="#b3a992">general / 1. bash</text>
+      <rect x="508" y="286" width="300" height="53" rx="3" fill="#232019" stroke="#3f372c"/>
+      <text x="518" y="304" font-size="11">◆ 1. bash</text>
+      <text x="518" y="320" font-size="10" fill="#b3a992">general</text>
+      <text x="518" y="334" font-size="10" fill="#c4a34f">working</text>
+    </g>
+    <!-- Banda -->
+    <g>
+      <rect x="832" y="112" width="292" height="53" rx="3" fill="#4a3b2c" stroke="#c4a34f"/>
+      <text x="842" y="130" font-size="11" font-weight="600">◆ π - build api</text>
+      <text x="842" y="146" font-size="10" fill="#b3a992">guitar / 1. bash / t17</text>
+      <text x="842" y="160" font-size="10" fill="#c4a34f">working</text>
+      <rect x="832" y="173" width="292" height="53" rx="3" fill="#232019" stroke="#3f372c"/>
+      <text x="842" y="191" font-size="11">◇ review schema</text>
+      <text x="842" y="207" font-size="10" fill="#b3a992">bass / 1. bash / t1b</text>
+      <text x="842" y="221" font-size="10" fill="#d4534d">blocked · needs you</text>
+      <g font-size="10" fill="#8c8271">
+        <rect x="832" y="234" width="26" height="30" rx="2" fill="#1c1a17" stroke="#3f372c"/>
+        <text x="866" y="253">drums / empty</text>
+        <rect x="832" y="272" width="26" height="30" rx="2" fill="#1c1a17" stroke="#3f372c"/>
+        <text x="866" y="291">singer / empty</text>
+      </g>
+      <text x="836" y="322" font-size="11" fill="#c4a34f">‹　1/2　›</text>
+    </g>
+    <text x="191" y="790" fill="#b3a992" font-size="11">This computer　 ·　 general　 ·　 2 agents</text>
+    <text x="1108" y="790" fill="#8c8271" font-size="11">commands</text>
+  </g>
+  <g font-family="Consolas, monospace" font-size="13" fill="#eee3c5">
+    <text x="202" y="372" fill="#c4a34f">PS general&gt;</text><text x="330" y="372"> running the set</text>
+    <text x="202" y="404" fill="#b3a992">Live terminal workspace. Splits unchanged.</text>
+    <text x="202" y="440" fill="#7d9a8c">✓ Venue theme loaded</text>
+    <text x="202" y="464" fill="#7d9a8c">✓ Poster board, stage and band wired</text>
+    <text x="202" y="500" fill="#c4a34f">Illustrative preview — not a captured session.</text>
+    <text x="202" y="536" fill="#c4a34f">PS general&gt; ▌</text>
+  </g>
+</svg>

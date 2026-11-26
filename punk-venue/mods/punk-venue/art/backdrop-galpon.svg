@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="64" viewBox="0 0 256 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Cold corrugated warehouse; real-band banners and stacked road crates</title>
+  <rect x="0" y="0" width="256" height="64" fill="#151412"/>
+  <rect x="0" y="0" width="256" height="55" fill="#627b88"/>
+  <path d="M5 2 V54 M14 2 V54 M23 2 V54 M32 2 V54 M41 2 V54 M50 2 V54 M59 2 V54 M68 2 V54 M77 2 V54 M86 2 V54 M95 2 V54 M104 2 V54 M113 2 V54 M122 2 V54 M131 2 V54 M140 2 V54 M149 2 V54 M158 2 V54 M167 2 V54 M176 2 V54 M185 2 V54 M194 2 V54 M203 2 V54 M212 2 V54 M221 2 V54 M230 2 V54 M239 2 V54 M248 2 V54" fill="none" stroke="#151412" stroke-width="1"/>
+  <path d="M0 6 L64 0 L128 6 L192 0 L256 6 M0 7 H256" fill="none" stroke="#eee3c5" stroke-width="1"/>
+  <rect x="21" y="3" width="29" height="2" fill="#eee3c5"/>
+  <rect x="205" y="3" width="29" height="2" fill="#eee3c5"/>
+  <defs><g id="b2"><path d="M0 0h3v1h-3Z M2 1h1v1h-1Z M0 2h3v1h-3Z M0 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="b7"><path d="M0 0h3v1h-3Z M2 1h1v1h-1Z M1 2h1v1h-1Z M1 3h1v1h-1Z M1 4h1v1h-1Z" fill="#151412"/></g><g id="bA"><path d="M1 0h1v1h-1Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h3v1h-3Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bD"><path d="M0 0h2v1h-2Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h2v1h-2Z" fill="#151412"/></g><g id="bE"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M0 2h2v1h-2Z M0 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bI"><path d="M0 0h3v1h-3Z M1 1h1v1h-1Z M1 2h1v1h-1Z M1 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bM"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h3v1h-3Z M0 2h3v1h-3Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bN"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h3v1h-3Z M0 2h3v1h-3Z M0 3h3v1h-3Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bO"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bQ"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h3v1h-3Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bR"><path d="M0 0h2v1h-2Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h2v1h-2Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bS"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M0 2h3v1h-3Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bT"><path d="M0 0h3v1h-3Z M1 1h1v1h-1Z M1 2h1v1h-1Z M1 3h1v1h-1Z M1 4h1v1h-1Z" fill="#151412"/></g><g id="bU"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g></defs>
+  <g transform="rotate(2 128 11)"><g role="img" aria-label="Todos Tus Muertos" data-lines="2" data-condensed="true" transform="translate(86 1)">
+    <path d="M0 1 L84 0 L83 19 L1 18 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+    <g transform="translate(22.75 2) scale(1.1 1.4)"><use href="#bT" x="0" y="0"/><use href="#bO" x="4" y="0"/><use href="#bD" x="8" y="0"/><use href="#bO" x="12" y="0"/><use href="#bS" x="16" y="0"/><use href="#bT" x="24" y="0"/><use href="#bU" x="28" y="0"/><use href="#bS" x="32" y="0"/></g>
+    <g transform="translate(27.15 10) scale(1.1 1.4)"><use href="#bM" x="0" y="0"/><use href="#bU" x="4" y="0"/><use href="#bE" x="8" y="0"/><use href="#bR" x="12" y="0"/><use href="#bT" x="16" y="0"/><use href="#bO" x="20" y="0"/><use href="#bS" x="24" y="0"/></g>
+  </g></g>
+  <g role="img" aria-label="Attaque 77" data-lines="1" data-condensed="false" transform="translate(3 17)">
+    <path d="M0 1 L50 0 L49 12 L1 11 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+    <g transform="translate(3.004 2.5) scale(1.128 1.4)"><use href="#bA" x="0" y="0"/><use href="#bT" x="4" y="0"/><use href="#bT" x="8" y="0"/><use href="#bA" x="12" y="0"/><use href="#bQ" x="16" y="0"/><use href="#bU" x="20" y="0"/><use href="#bE" x="24" y="0"/><use href="#b7" x="32" y="0"/><use href="#b7" x="36" y="0"/></g>
+  </g>
+  <path d="M86 2 L79 0 M170 3 L177 0" fill="none" stroke="#eee3c5" stroke-width="1"/>
+  <g transform="translate(4 42)"><rect x="0" y="0" width="21" height="12" fill="#385947"/><path d="M1 1 H20 V11 H1 Z M1 1 L20 11 M20 1 L1 11" fill="none" stroke="#627b88" stroke-width="1"/><rect x="8" y="4" width="5" height="3" fill="#151412"/></g>
+  <g transform="translate(27 42)"><rect x="0" y="0" width="21" height="12" fill="#385947"/><path d="M1 1 H20 V11 H1 Z M1 1 L20 11 M20 1 L1 11" fill="none" stroke="#627b88" stroke-width="1"/><rect x="8" y="4" width="5" height="3" fill="#151412"/></g>
+  <g transform="translate(15 29)"><rect x="0" y="0" width="21" height="12" fill="#385947"/><path d="M1 1 H20 V11 H1 Z M1 1 L20 11 M20 1 L1 11" fill="none" stroke="#627b88" stroke-width="1"/><rect x="8" y="4" width="5" height="3" fill="#151412"/></g>
+  <g transform="translate(213 42)"><rect x="0" y="0" width="21" height="12" fill="#385947"/><path d="M1 1 H20 V11 H1 Z M1 1 L20 11 M20 1 L1 11" fill="none" stroke="#627b88" stroke-width="1"/><rect x="8" y="4" width="5" height="3" fill="#151412"/></g>
+  <g transform="translate(228 29)"><rect x="0" y="0" width="21" height="12" fill="#385947"/><path d="M1 1 H20 V11 H1 Z M1 1 L20 11 M20 1 L1 11" fill="none" stroke="#627b88" stroke-width="1"/><rect x="8" y="4" width="5" height="3" fill="#151412"/></g>
+  <rect x="232" y="10" width="14" height="18" fill="#eee3c5"/>
+  <rect x="233" y="11" width="12" height="16" fill="#151412"/>
+  <rect x="234" y="15" width="10" height="10" fill="#627b88"/>
+  <rect x="235" y="17" width="8" height="1" fill="#151412"/>
+  <rect x="235" y="20" width="8" height="1" fill="#151412"/>
+  <rect x="235" y="23" width="8" height="1" fill="#151412"/>
+  <rect x="235" y="12" width="2" height="1" fill="#b93b36"/>
+  <rect x="240" y="12" width="2" height="1" fill="#c4a34f"/>
+  <g role="img" aria-label="2 Minutos" data-lines="1" data-condensed="false" transform="translate(203 30)">
+    <path d="M0 1 L50 0 L49 12 L1 11 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+    <g transform="translate(3.003 2.5) scale(1.257 1.4)"><use href="#b2" x="0" y="0"/><use href="#bM" x="8" y="0"/><use href="#bI" x="12" y="0"/><use href="#bN" x="16" y="0"/><use href="#bU" x="20" y="0"/><use href="#bT" x="24" y="0"/><use href="#bO" x="28" y="0"/><use href="#bS" x="32" y="0"/></g>
+  </g>
+  <rect x="0" y="54" width="256" height="2" fill="#385947"/>
+  <rect x="56" y="22" width="144" height="34" fill="#151412"/>
+  <rect x="0" y="56" width="256" height="8" fill="#151412"/>
+</svg>

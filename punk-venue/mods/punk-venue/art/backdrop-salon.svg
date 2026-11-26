@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="64" viewBox="0 0 256 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Community hall; bunting, real-band posters and plastic chairs</title>
+  <rect x="0" y="0" width="256" height="64" fill="#151412"/>
+  <rect x="0" y="0" width="256" height="55" fill="#385947"/>
+  <rect x="0" y="0" width="256" height="3" fill="#eee3c5"/>
+  <rect x="0" y="19" width="256" height="2" fill="#627b88"/>
+  <path d="M0 4 Q64 17 128 5 Q192 17 256 4" fill="none" stroke="#eee3c5" stroke-width="1"/>
+  <path d="M7 6 h10 l-5 8 Z" fill="#b93b36"/>
+  <path d="M33 9 h10 l-5 8 Z" fill="#c4a34f"/>
+  <path d="M59 9 h10 l-5 8 Z" fill="#eee3c5"/>
+  <path d="M85 9 h10 l-5 8 Z" fill="#b93b36"/>
+  <path d="M111 6 h10 l-5 8 Z" fill="#c4a34f"/>
+  <path d="M137 6 h10 l-5 8 Z" fill="#eee3c5"/>
+  <path d="M163 9 h10 l-5 8 Z" fill="#b93b36"/>
+  <path d="M189 9 h10 l-5 8 Z" fill="#c4a34f"/>
+  <path d="M215 9 h10 l-5 8 Z" fill="#eee3c5"/>
+  <path d="M241 6 h10 l-5 8 Z" fill="#b93b36"/>
+  <defs><g id="bA"><path d="M1 0h1v1h-1Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h3v1h-3Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bB"><path d="M0 0h2v1h-2Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h2v1h-2Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h2v1h-2Z" fill="#151412"/></g><g id="bD"><path d="M0 0h2v1h-2Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h2v1h-2Z" fill="#151412"/></g><g id="bE"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M0 2h2v1h-2Z M0 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bG"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bI"><path d="M0 0h3v1h-3Z M1 1h1v1h-1Z M1 2h1v1h-1Z M1 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bJ"><path d="M2 0h1v1h-1Z M2 1h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bL"><path d="M0 0h1v1h-1Z M0 1h1v1h-1Z M0 2h1v1h-1Z M0 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bM"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h3v1h-3Z M0 2h3v1h-3Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bN"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h3v1h-3Z M0 2h3v1h-3Z M0 3h3v1h-3Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bO"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bS"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M0 2h3v1h-3Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bU"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bV"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M1 4h1v1h-1Z" fill="#151412"/></g><g id="bY"><path d="M0 0h1v1h-1Z M2 0h1v1h-1Z M0 1h1v1h-1Z M2 1h1v1h-1Z M1 2h1v1h-1Z M1 3h1v1h-1Z M1 4h1v1h-1Z" fill="#151412"/></g></defs>
+  <g role="img" aria-label="Embajada Boliviana" data-lines="2" data-condensed="true" transform="translate(83 1)">
+    <path d="M0 1 L90 0 L89 20 L1 19 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+    <g transform="translate(27.95 2.5) scale(1.1 1.4)"><use href="#bE" x="0" y="0"/><use href="#bM" x="4" y="0"/><use href="#bB" x="8" y="0"/><use href="#bA" x="12" y="0"/><use href="#bJ" x="16" y="0"/><use href="#bA" x="20" y="0"/><use href="#bD" x="24" y="0"/><use href="#bA" x="28" y="0"/></g>
+    <g transform="translate(25.75 10.5) scale(1.1 1.4)"><use href="#bB" x="0" y="0"/><use href="#bO" x="4" y="0"/><use href="#bL" x="8" y="0"/><use href="#bI" x="12" y="0"/><use href="#bV" x="16" y="0"/><use href="#bI" x="20" y="0"/><use href="#bA" x="24" y="0"/><use href="#bN" x="28" y="0"/><use href="#bA" x="32" y="0"/></g>
+  </g>
+  <g role="img" aria-label="Sin Ley" data-lines="1" data-condensed="false" transform="translate(3 20)">
+    <path d="M0 1 L50 0 L49 12 L1 11 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+    <g transform="translate(6.1 2.5) scale(1.4 1.4)"><use href="#bS" x="0" y="0"/><use href="#bI" x="4" y="0"/><use href="#bN" x="8" y="0"/><use href="#bL" x="16" y="0"/><use href="#bE" x="20" y="0"/><use href="#bY" x="24" y="0"/></g>
+  </g>
+  <g role="img" aria-label="Bulldog" data-lines="1" data-condensed="false" transform="translate(203 20)">
+    <path d="M0 1 L50 0 L49 12 L1 11 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+    <g transform="translate(6.1 2.5) scale(1.4 1.4)"><use href="#bB" x="0" y="0"/><use href="#bU" x="4" y="0"/><use href="#bL" x="8" y="0"/><use href="#bL" x="12" y="0"/><use href="#bD" x="16" y="0"/><use href="#bO" x="20" y="0"/><use href="#bG" x="24" y="0"/></g>
+  </g>
+  <rect x="3" y="19" width="6" height="2" fill="#c4a34f"/>
+  <rect x="247" y="31" width="6" height="2" fill="#c4a34f"/>
+  <path d="M15 42 v-9 h12 v9 h2 v4 h-16 v-4 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+  <rect x="18" y="35" width="6" height="5" fill="#385947"/>
+  <path d="M16 46 l-2 8 M26 46 l2 8" fill="none" stroke="#eee3c5" stroke-width="2"/>
+  <path d="M222 42 v-9 h12 v9 h2 v4 h-16 v-4 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+  <rect x="225" y="35" width="6" height="5" fill="#385947"/>
+  <path d="M223 46 l-2 8 M233 46 l2 8" fill="none" stroke="#eee3c5" stroke-width="2"/>
+  <rect x="0" y="54" width="256" height="2" fill="#385947"/>
+  <rect x="56" y="22" width="144" height="34" fill="#151412"/>
+  <rect x="0" y="56" width="256" height="8" fill="#151412"/>
+</svg>

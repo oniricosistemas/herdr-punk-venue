@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Unoccupied guitar and amplifier; no person</title>
+  <rect x="7" y="40" width="14" height="18" fill="#eee3c5"/>
+  <rect x="8" y="41" width="12" height="16" fill="#151412"/>
+  <rect x="9" y="45" width="10" height="10" fill="#385947"/>
+  <rect x="10" y="47" width="8" height="1" fill="#151412"/>
+  <rect x="10" y="50" width="8" height="1" fill="#151412"/>
+  <rect x="10" y="53" width="8" height="1" fill="#151412"/>
+  <rect x="10" y="42" width="2" height="1" fill="#b93b36"/>
+  <rect x="15" y="42" width="2" height="1" fill="#c4a34f"/>
+  <g transform="rotate(-22 32 40)"><path d="M23 33 L29 31 L34 36 L39 34 L42 40 L37 48 L28 50 L22 44 Z" fill="#b93b36" stroke="#eee3c5" stroke-width="1"/><path d="M32 38 L47 20 L51 22 L36 41 Z" fill="#c4a34f" stroke="#151412" stroke-width="1"/><path d="M47 20 L49 15 L54 17 L52 23 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/><path d="M29 43 L51 19" fill="none" stroke="#151412" stroke-width="1"/><rect x="27" y="42" width="6" height="3" fill="#151412"/><rect x="29" y="37" width="3" height="3" fill="#eee3c5"/></g>
+  <path d="M30 50 L26 59 H39 L35 50" fill="none" stroke="#627b88" stroke-width="2"/>
+</svg>
