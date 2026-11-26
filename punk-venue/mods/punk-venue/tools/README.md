@@ -65,9 +65,9 @@ groups; every `href` must be an internal fragment resolving within that SVG.
 hashes are checked before and after regeneration. `scene-sha256.json` adds
 the three original scene hashes captured before the T7 increment. Only its
 `entrance.svg` entry was updated for the neutral ENTRADA sign and named poster.
-The validator pins separate authorized hashes for the shipped entrance and the
-S9 crowd redraw without flags; the manifest's fallback/crowd entries and the entire square
-manifest remain unchanged. The two cutouts are checked against deterministic
+The validator pins separate authorized hashes for the shipped entrance, crowd
+strip and runtime backplate; the manifest's fallback/crowd entries and the entire
+square manifest remain unchanged. The two cutouts are checked against deterministic
 regeneration, not a preservation manifest. Variant hashes are compared across regeneration, not stored
 in a preservation manifest. Do not refresh preservation manifests to conceal
 an unintended change. The validator also checks exact accessible band names,
@@ -147,8 +147,9 @@ These are composition and geometry expectations, not a new optical review.
   tall (1.33x the original 9; about 9 display pixels instead of 7), without
   changing the strip height or the entrance figures. The hem crops lower bodies so
   there is room for faces, mohawks, raised fists and bent bottle-holding arms.
-  With the flags and poles gone, the first painted crowd shape is a raised
-  fist at art `y=13`, leaving the top 13 of 64 units transparent.
+  The fists stay below the tops of the faces. The first painted crowd shape
+  is now a mohawk at strip `y=23` (formerly a fist at `y=13`), leaving the
+  top 23 of 64 units transparent.
   The two cutouts are 64-unit square crops at the strip's 1:1 art scale,
   centered on the same front-row faces at x=206 and x=243. They show the whole
   figure down to the original hem, with a 0.5–2 unit upward offset for the

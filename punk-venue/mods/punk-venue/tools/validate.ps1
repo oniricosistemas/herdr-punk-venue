@@ -15,11 +15,11 @@ $squareHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'square-sha256
 $sceneHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'scene-sha256.json') -Raw | ConvertFrom-Json
 # S8 projects nine known figure instances out of the preserved entrance.
 $shippedEntranceHash = '0e78ad1a938b46ca9b4e1c15cc3c3cd8377b98ee721ad91204b40f1eb36198f7'
-# S9 redraw with 12-unit heads, now without the two flags. Keep the original manifest hash.
-$authorizedCrowdHash = 'ca6252a00b737c43d22855f20141f6cc327f85c11a781a950c2e64fe1e13d861'
-# The flags' removal lives in the backplate too, and it is not one of the 3 preserved
+# S9 redraw with 12-unit heads, no flags and lowered fists. Keep the original manifest hash.
+$authorizedCrowdHash = '368bd8113b830556059e7c07d10c23497b6634eaf7d666d2ecb901379bdf6375'
+# The runtime backplate shares that redraw. It is not one of the 3 preserved
 # scenes, so it needs its own pin: a flag merged into the hem would otherwise pass.
-$authorizedBackplateHash = 'adcef2bea8d0f88fa100229abea00f76014f6318aa607860513f15b7a4bed01e'
+$authorizedBackplateHash = 'dfb62d9c8c5bb1b1256804d183ab94787824c2ed4b13d3d83862930e46e9b287'
 if (@(Compare-Object ($originalScenes | Sort-Object) ($sceneHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Original-scene preservation manifest must contain exactly the 3 original scenes'
 }
@@ -115,6 +115,17 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
             $figures = @($doc.SelectNodes('/*/*[local-name()="use"]'))
             if ($fans.Count -ne 3 -or $figures.Count -ne 24) {
                 throw 'crowd.svg: expected 24 figures in three poses'
+            }
+        }
+        if ($file.Name -in @('crowd.svg', 'crowd-backplate.svg', 'crowd-front-punk.svg')) {
+            $punk = if ($file.Name -eq 'crowd-front-punk.svg') { $doc.DocumentElement.LastChild }
+                else { $doc.SelectSingleNode('//*[@id="punk"]') }
+            # The shared punk drawing starts with the face and ends with the fist.
+            # Set the fist back from the face top to clear the low edge of the guitar.
+            $fist = $punk.LastChild
+            if ($fist.LocalName -ne 'rect' -or
+                [int]$fist.GetAttribute('y') -lt ([int]$punk.FirstChild.GetAttribute('y') + 1)) {
+                throw "$($file.Name): raised fist must begin below the top of the face"
             }
         }
         if ($file.Name -in @('crowd.svg', 'crowd-backplate.svg')) {
@@ -310,7 +321,7 @@ $largest = Get-ChildItem -LiteralPath $art -File | Sort-Object Length -Descendin
 Write-Output "PASS: $($expected.Count) XML SVGs; exact filenames, safe local shapes, six-color palette, all under 8 KiB."
 Write-Output "PASS: wide scenes, $($walkFrames.Count) preserved walk frames and $($queueFrames.Count) new queue poses have matching viewBoxes; crowd and its backplate are 512x64 (8:1)."
 Write-Output "PASS: fallback and 34 square SVGs match preserved SHA-256; crowd and entrance match their authorized updated hashes."
-Write-Output "PASS: 24 larger crowd figures, two anchored figure cutouts, no flags or poles on either strip, and crisp edges."
+Write-Output "PASS: 24 larger crowd figures, two anchored figure cutouts, fists below face tops, no flags or poles on either strip, and crisp edges."
 Write-Output "PASS: 13 distinct real band names, exact accessible casing, uppercase shape spelling, no scene repeats; neutral ENTRADA sign."
 Write-Output "PASS: 4 variants reserve dark lower-center musician and bottom-eighth crowd zones."
 Write-Output "PASS: two generator runs and shipped art are byte-identical (SHA-256, all $($generatedNames.Count) generated files, including all $($originalGeneratedNames.Count) originals). The preserved entrance matches its original SHA-256 and has exactly nine authorized figure removals."

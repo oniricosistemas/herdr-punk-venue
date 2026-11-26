@@ -318,7 +318,7 @@ function salon() {
 // Two stencilled shirts carry initials of the invented banner bands, not existing logos.
 const fanFace = { x: 2, width: 5, height: 6 };
 function fan(x, y, punk = false, seated = false, shirt = 'denim', marked = false, gesture = 'rest', pose = {}) {
-  const { lean = 0, lift = 0, tuck = 0, step = '' } = pose;
+  const { lean = 0, lift = 0, tuck = 0, step = '', elbowDrop = 0 } = pose;
   const head = x + lean;
   const p = [rect(head + fanFace.x, y, fanFace.width, fanFace.height, 'cream')];
   p.push(punk ? path(`M${head + 1} ${y + 2} L${head + 1} ${y - 2} L${head + 4} ${y} L${head + 5} ${y - 4} L${head + 7} ${y - 1} L${head + 8} ${y + 3} Z`, 'red')
@@ -327,7 +327,7 @@ function fan(x, y, punk = false, seated = false, shirt = 'denim', marked = false
   if (marked) p.push(stencil('BS', x + 1, y + 8, 0.75, 'cream'));
   p.push(path(seated ? `M${x + 2} ${y + 17} H${x + 12} V${y + 24} M${x + 7} ${y + 17} L${x + 15} ${y + 20}`
     : step || `M${x + 2} ${y + 17} L${x + 1} ${y + 25} M${x + 7} ${y + 17} L${x + 9} ${y + 25}`, 'none', 'denim', 3));
-  const rightArm = gesture === 'fist' ? `L${x + 13 - tuck} ${y + 2} V${y - 6 - lift}`
+  const rightArm = gesture === 'fist' ? `L${x + 13 - tuck} ${y + 2 + elbowDrop} V${y - 6 - lift}`
     : gesture === 'bottle' ? `L${x + 13} ${y + 12} L${x + 15 - tuck} ${y + 6 - lift}`
     : `L${x + 12 - tuck} ${y + 11 - lift}`;
   p.push(path(`M${x} ${y + 8} L${x - 2 + lean} ${y + 14} M${x + 8} ${y + 8} ${rightArm}`, 'none', 'cream', 2));
@@ -345,6 +345,12 @@ function neighbors() {
   return `<defs>\n${Object.entries(entranceFan).map(([id, draw]) => `    <g id="${id}">${draw(0, 0)}</g>`).join('\n')}\n  </defs>`;
 }
 const crowdScale = 2;
+const crowdFan = {
+  // Keep the fist just below the face top and the forearm bent upward.
+  punk: (x, y) => entranceFan.punk(x, y, { lift: -10, elbowDrop: 4 }),
+  drinker: entranceFan.drinker,
+  neighbor: entranceFan.neighbor,
+};
 const fanFaceCenter = fanFace.x + fanFace.width / 2;
 // main.js centers the square overlays on these strip x coordinates.
 const crowdAnchors = [
@@ -353,7 +359,8 @@ const crowdAnchors = [
 ];
 const anchoredFan = ({ id, center, y }) => [id, center - fanFaceCenter * crowdScale, y];
 function crowd(backplate = false) {
-  const p = [`<defs>\n    <g id="punk" transform="scale(${crowdScale})">${fan(0, 0, true, false, 'black', true, 'fist')}</g>\n    <g id="drinker" transform="scale(${crowdScale})">${fan(0, 0, false, false, 'green', false, 'bottle')}</g>\n    <g id="neighbor" transform="scale(${crowdScale})">${fan(0, 0, false, false, 'denim')}</g>\n  </defs>`,
+  const poses = Object.entries(crowdFan).map(([id, draw]) => `    <g id="${id}" transform="scale(${crowdScale})">${draw(0, 0)}</g>`);
+  const p = [`<defs>\n${poses.join('\n')}\n  </defs>`,
     path('M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z', 'black')];
   // Front shoulders overlap the rear row. The hem crops the enlarged bodies.
   for (const [id, x, y] of [
@@ -376,7 +383,7 @@ function saveCrowd() {
     // Pixel-for-pixel with crowd.svg, centred on its face anchor. The scene
     // clips the body at the existing strip hem even when the layer moves up.
     save(`crowd-front-${id}`, `${band} front row; moving figure`, [
-      `<g transform="translate(${32 - fanFaceCenter * crowdScale} ${y - 3}) scale(${crowdScale})">${entranceFan[id](0, 0)}</g>`,
+      `<g transform="translate(${32 - fanFaceCenter * crowdScale} ${y - 3}) scale(${crowdScale})">${crowdFan[id](0, 0)}</g>`,
     ]);
   }
 }
