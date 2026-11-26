@@ -2,8 +2,7 @@
 
 Original SVG pixel/stencil art for T2 (S1, S3, S7), with the wide-scene revision
 covering S2-S3 and T7 stage variants covering S11's art increment.
-The shipped assets are the 41 files in `../art/`; no tooling
-runs in the mod. No dependencies or network. No fonts, stylesheets, embedded
+The 59 shipped assets are in `../art/`; no tooling runs in the mod. No dependencies or network. No fonts, stylesheets, embedded
 images, external resources, or copied band logos. All assets share six colors.
 The owner-approved S3 lettering increment uses real band names as original
 uppercase stencil shapes, not reproductions of band typography or logos.
@@ -18,11 +17,16 @@ gear assets remain `width="64" height="64" viewBox="0 0 64 64"`, byte-identical
 to their pre-revision versions. Scenes are recomposed across the wide canvas,
 not horizontally stretched square art.
 
-From the repository/workspace root:
+Regenerate just the crowd strip and its two cutouts from the repository root:
 
 ```sh
-node punk-venue/mods/punk-venue/tools/generate.mjs
+node punk-venue/mods/punk-venue/tools/generate.mjs --crowd-only
 ```
+
+The full generator (without `--crowd-only`) writes the original 41 files plus
+both crowd cutouts. Run the validator for full regeneration in scratch: running
+the full generator directly would restore two static walkers to the shipped
+entrance, where those figures must be separate animated layers.
 
 Run the banner layout and entrance queue timer tests directly with Node:
 
@@ -42,8 +46,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File punk-venue/mods/punk-venue/t
 ```
 
 The validator first runs eight deterministic Node layout tests and checks the
-shipped assets, then runs the generator twice
-and compares all three SHA-256 snapshots. It checks the exact filename set,
+59 shipped assets, then runs the generator twice in system temp and compares
+all three SHA-256 snapshots for the original 41 files and both crowd cutouts.
+The entrance comparison applies exactly the two authorized walker removals. It checks the exact filename set,
 XML parsing with DTDs prohibited and resolution disabled, SVG namespace,
 dimensions/viewBox, an element/attribute allowlist, palette, distinct state
 files, and the 8 KiB budget. Scene-local `defs`/`use` reuse deterministic shape
@@ -51,15 +56,16 @@ groups; every `href` must be an internal fragment resolving within that SVG.
 `square-sha256.json` records all 34 square assets before this revision; their
 hashes are checked before and after regeneration. `scene-sha256.json` adds
 the three original scene hashes captured before the T7 increment. Only its
-`entrance.svg` entry was legitimately updated for the neutral ENTRADA sign and
-named poster; fallback/crowd entries and the entire square manifest remain
-unchanged. Together they protect 36 unchanged assets and pin the authorized
-entrance revision. Variant hashes are compared across regeneration, not stored
+`entrance.svg` entry was updated for the neutral ENTRADA sign and named poster.
+The validator pins separate authorized hashes for the shipped entrance and the
+S9 crowd redraw; the manifest's fallback/crowd entries and the entire square
+manifest remain unchanged. The two cutouts are checked against deterministic
+regeneration, not a preservation manifest. Variant hashes are compared across regeneration, not stored
 in a preservation manifest. Do not refresh preservation manifests to conceal
 an unintended change. The validator also checks exact accessible band names,
 uppercase glyph spelling, line counts, condensation and scene uniqueness.
 Variants must finish with solid near-black clearance masks
-for the band and crowd zones. The validator creates no scratch files and does
+for the band and crowd zones. The validator cleans its scratch files and does
 not judge visual quality.
 
 ## Palette
@@ -75,7 +81,9 @@ not judge visual quality.
 
 ## Delivered files (all in `../art/`)
 
-- `backdrop.svg`, `crowd.svg` (unchanged original wide scenes), `entrance.svg` (neutral shared entrance)
+- `backdrop.svg` (generic fallback), `crowd.svg` (larger front row), `entrance.svg` (neutral shared entrance)
+- `crowd-front-punk.svg` and `crowd-front-neighbor.svg` (generated overlays), `monitor-riser.svg`
+- Seven `*-strike.svg` musician poses and eight `queue-walk-{punk,neighbor}-*.svg` entrance frames
 - `backdrop-club.svg`, `backdrop-galpon.svg`, `backdrop-plaza.svg`, `backdrop-salon.svg`
 - `guitar-working.svg`, `guitar-idle.svg`, `guitar-blocked.svg`, `guitar-done.svg`
 - `bass-working.svg`, `bass-idle.svg`, `bass-blocked.svg`, `bass-done.svg`
@@ -106,7 +114,8 @@ The corrugated shed roof, exposed brick, taped photocopied bills, fraying
 cloth banner, beer cups, mixed punk/neighborhood queue and seated spectators
 establish the DIY venue rather than a neon/cyberpunk setting. Only the protected
 generic fallback and crowd retain the invented Barro Sur / Ruido Roto banners;
-legacy `BS` shirt stencils remain unchanged. The four venue variants now use
+the crowd flags expose those exact accessible names, and the legacy `BS` shirt
+stencils remain unchanged. The four venue variants now use
 the owner's real-band mapping below. All lettering is hand-defined 3x5 shape
 geometry, not text/font rendering.
 
@@ -122,17 +131,17 @@ These are composition and geometry expectations, not a new optical review.
   live musician overlays. The low stage lip spans the entire width. Banner
   glyphs are roughly 11-16 screen pixels high; the cream cloth reads as a
   photocopied gig banner without becoming a centered miniature scene.
-- **crowd at 400 x 50:** 31 mixed punk/ordinary figures form two irregular
-  rows spanning almost the entire 400-pixel width, without stretching the
-  individual figures. Crowd-only 1.5x shape groups keep heads roughly 6 pixels
-  wide. The lower half (screen y=25..50) contains the closer row's cream
-  faces, red mohawks, overlapping shoulders, denim/green shirts and bent
-  bottle-holding arms. Their lower bodies crop naturally at the bottom edge.
-  Rear heads sit higher; raised fists and two cloth flags break the skyline.
-  Flags carry the invented names Barro Sur and Ruido Roto, but their roughly
-  6-pixel-high lettering is poster texture rather than guaranteed readable
-  text at this scale. The upper background and gaps between people remain
-  transparent; only a shallow near-black hem closes the bottom edge.
+- **crowd at 400 x 50:** 24 figures instead of 31, arranged in two staggered,
+  overlapping rows. Crowd-only 2.5x shape groups make the face 15 canvas units
+  tall instead of 9 (about 12 display pixels instead of 7), without changing
+  the strip height or the entrance figures. The hem crops lower bodies so
+  there is room for faces, mohawks, raised fists and bent bottle-holding arms.
+  Both invented flags and their uppercase stencils remain unobstructed.
+  Their roughly 6-pixel-high lettering is still poster texture at this size.
+  The square cutouts sit on the same front-row faces at x=206 and x=243.
+  Their fixed display box is smaller than one enlarged head at a 4:1 stage,
+  so they animate inset face details rather than redraw a whole head and arm.
+  The strip keeps the full silhouettes and raised arms.
 - **entrance:** a cream/red entrance and neutral ENTRADA sign sit left of
   center, with a small Alerta Roja pasted poster and a queue stretching right.
   Standing drinkers and two seated neighbors occupy the left pavement, so
@@ -171,7 +180,8 @@ These are real band names used at the owner's request for a personal desktop
 scene. The package must not be redistributed publicly with them without
 permission. No logo, album art or distinctive band lettering was copied.
 This owner-approved increment replaces the earlier invented-only rule for the
-four variants and entrance poster; protected fallback/crowd art stays intact.
+four variants and entrance poster; the fallback and crowd keep their invented
+names.
 
 The generator's `banner()` helper uses `layoutBanner()` from
 `banner-layout.mjs`. Up to 11 characters use one line; 12-16 use two lines at

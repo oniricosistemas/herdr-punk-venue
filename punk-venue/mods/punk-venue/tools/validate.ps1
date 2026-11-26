@@ -15,6 +15,8 @@ $squareHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'square-sha256
 $sceneHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'scene-sha256.json') -Raw | ConvertFrom-Json
 # The generator still owns the original entrance. Only the shipped base omits the walkers.
 $shippedEntranceHash = '3c58b37715eb0a43faf1730cf43055dee97131e85c10ff249127673300daf765'
+# S9 redraw; keep the original crowd SHA-256 in the preservation manifest.
+$authorizedCrowdHash = '8a89c581ff2e1b92f80e18be314090c229c308765f8f5fe8722a83fa7558f1bc'
 if (@(Compare-Object ($originalScenes | Sort-Object) ($sceneHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Original-scene preservation manifest must contain exactly the 3 original scenes'
 }
@@ -39,8 +41,9 @@ $condensedNames = @('Todos Tus Muertos', 'Boom Boom Kid', 'Embajada Boliviana')
 $allBandNames = @($bannerNames.Values | ForEach-Object { $_ } | Where-Object { $_ -ne 'ENTRADA' } | Select-Object -Unique)
 if ($allBandNames.Count -lt 12) { throw 'At least 12 distinct real band names required' }
 $generatedNames = $expected
-$additions = @($kinds | ForEach-Object { "$_-strike.svg" }) + @(
-    'crowd-front-punk.svg', 'crowd-front-neighbor.svg', 'monitor-riser.svg')
+$crowdCutouts = @('crowd-front-punk.svg', 'crowd-front-neighbor.svg')
+$crowdAnchors = @{ punk = 206; neighbor = 243 }
+$additions = @($kinds | ForEach-Object { "$_-strike.svg" }) + $crowdCutouts + @('monitor-riser.svg')
 $walkers = @('punk', 'neighbor')
 $walkFrames = @(foreach ($walker in $walkers) {
     foreach ($frame in 0..3) { "queue-walk-$walker-$frame.svg" }
@@ -74,6 +77,43 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
             $doc.DocumentElement.GetAttribute('width') -cne $width -or
             $doc.DocumentElement.GetAttribute('height') -cne '64') {
             throw "$($file.Name): wrong SVG root, namespace, dimensions or viewBox"
+        }
+        if ($file.Name -eq 'crowd.svg') {
+            $fans = @($doc.SelectNodes('/*/*[local-name()="defs"]/*[local-name()="g"]'))
+            foreach ($fan in $fans) {
+                $face = $fan.FirstChild
+                if ($face.LocalName -ne 'rect' -or $face.GetAttribute('fill') -cne '#eee3c5' -or
+                    $fan.GetAttribute('transform') -cnotmatch '^scale\(([0-9.]+)\)$') {
+                    throw 'crowd.svg: missing scaled fan face'
+                }
+                $scale = [double]::Parse($Matches[1], [Globalization.CultureInfo]::InvariantCulture)
+                $headHeight = [int]$face.GetAttribute('height') * $scale
+                if ($headHeight -lt (9 * 1.4) -or $headHeight -gt (9 * 1.75)) {
+                    throw "crowd.svg: head height $headHeight does not enlarge the original 9 units by 1.4x to 1.75x"
+                }
+                $pose = $fan.GetAttribute('id')
+                if ($crowdAnchors.ContainsKey($pose)) {
+                    $faceCenter = $scale * ([double]$face.GetAttribute('x') + [double]$face.GetAttribute('width') / 2)
+                    $uses = @($doc.SelectNodes("/*/*[@href='#$pose']"))
+                    if ($uses.Count -eq 0 -or @($uses | Where-Object {
+                        [Math]::Abs([double]$_.GetAttribute('x') + $faceCenter - $crowdAnchors[$pose]) -lt 0.5
+                    }).Count -ne 1) {
+                        throw "crowd.svg: $pose face must match its main.js cutout x anchor"
+                    }
+                }
+            }
+            $figures = @($doc.SelectNodes('/*/*[local-name()="use"]'))
+            if ($fans.Count -ne 3 -or $figures.Count -ne 24) {
+                throw 'crowd.svg: expected 24 figures in three poses'
+            }
+            $flagNames = @($doc.SelectNodes('/*/*[@role="img"]') | ForEach-Object { $_.GetAttribute('aria-label') })
+            if (($flagNames -join '|') -cne 'Barro Sur|Ruido Roto') {
+                throw 'crowd.svg: missing invented flag names or incorrect accessible casing'
+            }
+        }
+        if (($file.Name -eq 'crowd.svg' -or $file.Name -in $crowdCutouts) -and
+            $doc.DocumentElement.GetAttribute('shape-rendering') -cne 'crispEdges') {
+            throw "$($file.Name): crowd art must use crisp edges"
         }
         if ($file.Name -in $walkFrames -and $doc.DocumentElement.GetAttribute('shape-rendering') -cne 'crispEdges') {
             throw "$($file.Name): queue walker must use crisp edges"
@@ -167,6 +207,7 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
         }
         if ($file.Name -in $originalScenes) {
             $authorized = if ($ShippedEntrance -and $file.Name -eq 'entrance.svg') { $shippedEntranceHash }
+                elseif ($file.Name -eq 'crowd.svg') { $authorizedCrowdHash }
                 else { $sceneHashes.($file.Name) }
             if ($hashes[$file.Name] -ine $authorized) {
                 throw "$($file.Name): original scene changed from its authorized SHA-256"
@@ -187,8 +228,8 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
 }
 # Check shipped files before generation, so stale/corrupt delivery is not masked.
 $shipped = Assert-Art $art $expected -ShippedEntrance
-# The original generator owns 41 assets. Run it away from the shipped art;
-# stage additions and walk frames are validated above, not produced by this tool.
+# Generate the original 41 assets plus the two crowd cutouts away from shipped art.
+# Other stage additions and walk frames are validated above, not generated here.
 $scratch = Join-Path ([IO.Path]::GetTempPath()) ('punk-venue-validate-' + [guid]::NewGuid().ToString('N'))
 $tools = Join-Path $scratch 'tools'
 $generatedArt = Join-Path $scratch 'art'
@@ -199,12 +240,17 @@ try {
     $generator = Join-Path $tools 'generate.mjs'
     & node $generator
     if ($LASTEXITCODE -ne 0) { throw "First generator run exited $LASTEXITCODE" }
-    $first = Assert-Art $generatedArt $generatedNames
+    $first = Assert-Art $generatedArt ($generatedNames + $crowdCutouts)
     & node $generator
     if ($LASTEXITCODE -ne 0) { throw "Second generator run exited $LASTEXITCODE" }
-    $second = Assert-Art $generatedArt $generatedNames
+    $second = Assert-Art $generatedArt ($generatedNames + $crowdCutouts)
     foreach ($name in $generatedNames) {
         if ($first[$name] -cne $second[$name] -or ($name -ne 'entrance.svg' -and $shipped[$name] -cne $first[$name])) {
+            throw "$name is stale or not byte-identical across regeneration"
+        }
+    }
+    foreach ($name in $crowdCutouts) {
+        if ($shipped[$name] -cne $first[$name] -or $first[$name] -cne $second[$name]) {
             throw "$name is stale or not byte-identical across regeneration"
         }
     }
@@ -224,8 +270,9 @@ try {
 $largest = Get-ChildItem -LiteralPath $art -File | Sort-Object Length -Descending | Select-Object -First 1
 Write-Output "PASS: $($expected.Count) XML SVGs; exact filenames, safe local shapes, six-color palette, all under 8 KiB."
 Write-Output "PASS: backdrop/entrance, 4 variants and $($walkFrames.Count) walk frames are 256x64 (4:1); crowd is 512x64 (8:1), all with matching viewBox."
-Write-Output "PASS: fallback/crowd and 34 square SVGs match preserved SHA-256; entrance matches its authorized updated hash."
+Write-Output "PASS: fallback and 34 square SVGs match preserved SHA-256; crowd and entrance match their authorized updated hashes."
+Write-Output "PASS: 24 larger crowd figures, two anchored face cutouts, exact invented flag names and crisp edges."
 Write-Output "PASS: 13 distinct real band names, exact accessible casing, uppercase shape spelling, no scene repeats; neutral ENTRADA sign."
 Write-Output "PASS: 4 variants reserve dark lower-center musician and bottom-eighth crowd zones."
-Write-Output "PASS: two generator runs are byte-identical (SHA-256, all $($generatedNames.Count) generated files); shipped art matches all after the two authorized entrance removals."
+Write-Output "PASS: two generator runs are byte-identical (SHA-256, all $($generatedNames.Count) original generated files plus $($crowdCutouts.Count) cutouts); shipped art matches all after the two authorized entrance removals."
 Write-Output "Largest asset: $($largest.Name), $($largest.Length) bytes."

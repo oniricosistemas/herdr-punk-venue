@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="64" viewBox="0 0 512 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
   <title>Ultra-wide front row; invented bands Barro Sur and Ruido Roto</title>
   <defs>
-    <g id="punk" transform="scale(1.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+    <g id="punk" transform="scale(2.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
   <path d="M1 2 L1 -2 L4 0 L5 -4 L7 -1 L8 3 Z" fill="#b93b36"/>
   <path d="M1 6 H8 L10 16 H-1 Z" fill="#151412" stroke="#151412" stroke-width="1"/>
   <path d="M1 8h1.5v0.75h-1.5Z M1 8.75h0.75v0.75h-0.75Z M2.5 8.75h0.75v0.75h-0.75Z M1 9.5h1.5v0.75h-1.5Z M1 10.25h0.75v0.75h-0.75Z M2.5 10.25h0.75v0.75h-0.75Z M1 11h1.5v0.75h-1.5Z" fill="#eee3c5"/><path d="M4 8h2.25v0.75h-2.25Z M4 8.75h0.75v0.75h-0.75Z M4 9.5h2.25v0.75h-2.25Z M5.5 10.25h0.75v0.75h-0.75Z M4 11h2.25v0.75h-2.25Z" fill="#eee3c5"/>
   <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>
   <path d="M0 8 L-2 14 M8 8 L13 2 V-6" fill="none" stroke="#eee3c5" stroke-width="2"/>
   <rect x="11" y="-9" width="5" height="4" fill="#eee3c5"/></g>
-    <g id="drinker" transform="scale(1.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+    <g id="drinker" transform="scale(2.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
   <rect x="1" y="-1" width="7" height="3" fill="#151412"/>
   <path d="M1 6 H8 L10 16 H-1 Z" fill="#385947" stroke="#151412" stroke-width="1"/>
   <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>
   <path d="M0 8 L-2 14 M8 8 L13 12 L15 6" fill="none" stroke="#eee3c5" stroke-width="2"/>
   <path d="M14 6 v-6 h1 v-3 h2 v3 h1 v6 Z" fill="#c4a34f" stroke="#151412" stroke-width="1"/></g>
-    <g id="neighbor" transform="scale(1.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+    <g id="neighbor" transform="scale(2.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
   <rect x="1" y="-1" width="7" height="3" fill="#151412"/>
   <path d="M1 6 H8 L10 16 H-1 Z" fill="#627b88" stroke="#151412" stroke-width="1"/>
   <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>
@@ -22,39 +22,30 @@
   </defs>
   <path d="M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z" fill="#151412"/>
   <path d="M80 7 V39 M388 8 V40" fill="none" stroke="#c4a34f" stroke-width="2"/>
-  <path d="M81 4 L145 7 L141 23 L81 20 Z" fill="#eee3c5" stroke="#b93b36" stroke-width="1"/>
-  <path d="M86 10h3v1.5h-3Z M86 11.5h1.5v1.5h-1.5Z M89 11.5h1.5v1.5h-1.5Z M86 13h3v1.5h-3Z M86 14.5h1.5v1.5h-1.5Z M89 14.5h1.5v1.5h-1.5Z M86 16h3v1.5h-3Z" fill="#151412"/><path d="M93.5 10h1.5v1.5h-1.5Z M92 11.5h1.5v1.5h-1.5Z M95 11.5h1.5v1.5h-1.5Z M92 13h4.5v1.5h-4.5Z M92 14.5h1.5v1.5h-1.5Z M95 14.5h1.5v1.5h-1.5Z M92 16h1.5v1.5h-1.5Z M95 16h1.5v1.5h-1.5Z" fill="#151412"/><path d="M98 10h3v1.5h-3Z M98 11.5h1.5v1.5h-1.5Z M101 11.5h1.5v1.5h-1.5Z M98 13h3v1.5h-3Z M98 14.5h1.5v1.5h-1.5Z M101 14.5h1.5v1.5h-1.5Z M98 16h1.5v1.5h-1.5Z M101 16h1.5v1.5h-1.5Z" fill="#151412"/><path d="M104 10h3v1.5h-3Z M104 11.5h1.5v1.5h-1.5Z M107 11.5h1.5v1.5h-1.5Z M104 13h3v1.5h-3Z M104 14.5h1.5v1.5h-1.5Z M107 14.5h1.5v1.5h-1.5Z M104 16h1.5v1.5h-1.5Z M107 16h1.5v1.5h-1.5Z" fill="#151412"/><path d="M110 10h4.5v1.5h-4.5Z M110 11.5h1.5v1.5h-1.5Z M113 11.5h1.5v1.5h-1.5Z M110 13h1.5v1.5h-1.5Z M113 13h1.5v1.5h-1.5Z M110 14.5h1.5v1.5h-1.5Z M113 14.5h1.5v1.5h-1.5Z M110 16h4.5v1.5h-4.5Z" fill="#151412"/><path d="M122 10h4.5v1.5h-4.5Z M122 11.5h1.5v1.5h-1.5Z M122 13h4.5v1.5h-4.5Z M125 14.5h1.5v1.5h-1.5Z M122 16h4.5v1.5h-4.5Z" fill="#151412"/><path d="M128 10h1.5v1.5h-1.5Z M131 10h1.5v1.5h-1.5Z M128 11.5h1.5v1.5h-1.5Z M131 11.5h1.5v1.5h-1.5Z M128 13h1.5v1.5h-1.5Z M131 13h1.5v1.5h-1.5Z M128 14.5h1.5v1.5h-1.5Z M131 14.5h1.5v1.5h-1.5Z M128 16h4.5v1.5h-4.5Z" fill="#151412"/><path d="M134 10h3v1.5h-3Z M134 11.5h1.5v1.5h-1.5Z M137 11.5h1.5v1.5h-1.5Z M134 13h3v1.5h-3Z M134 14.5h1.5v1.5h-1.5Z M137 14.5h1.5v1.5h-1.5Z M134 16h1.5v1.5h-1.5Z M137 16h1.5v1.5h-1.5Z" fill="#151412"/>
-  <path d="M389 5 L454 8 L450 24 L389 22 Z" fill="#b93b36" stroke="#eee3c5" stroke-width="1"/>
-  <path d="M393 11h3v1.5h-3Z M393 12.5h1.5v1.5h-1.5Z M396 12.5h1.5v1.5h-1.5Z M393 14h3v1.5h-3Z M393 15.5h1.5v1.5h-1.5Z M396 15.5h1.5v1.5h-1.5Z M393 17h1.5v1.5h-1.5Z M396 17h1.5v1.5h-1.5Z" fill="#eee3c5"/><path d="M399 11h1.5v1.5h-1.5Z M402 11h1.5v1.5h-1.5Z M399 12.5h1.5v1.5h-1.5Z M402 12.5h1.5v1.5h-1.5Z M399 14h1.5v1.5h-1.5Z M402 14h1.5v1.5h-1.5Z M399 15.5h1.5v1.5h-1.5Z M402 15.5h1.5v1.5h-1.5Z M399 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M405 11h4.5v1.5h-4.5Z M406.5 12.5h1.5v1.5h-1.5Z M406.5 14h1.5v1.5h-1.5Z M406.5 15.5h1.5v1.5h-1.5Z M405 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M411 11h3v1.5h-3Z M411 12.5h1.5v1.5h-1.5Z M414 12.5h1.5v1.5h-1.5Z M411 14h1.5v1.5h-1.5Z M414 14h1.5v1.5h-1.5Z M411 15.5h1.5v1.5h-1.5Z M414 15.5h1.5v1.5h-1.5Z M411 17h3v1.5h-3Z" fill="#eee3c5"/><path d="M417 11h4.5v1.5h-4.5Z M417 12.5h1.5v1.5h-1.5Z M420 12.5h1.5v1.5h-1.5Z M417 14h1.5v1.5h-1.5Z M420 14h1.5v1.5h-1.5Z M417 15.5h1.5v1.5h-1.5Z M420 15.5h1.5v1.5h-1.5Z M417 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M429 11h3v1.5h-3Z M429 12.5h1.5v1.5h-1.5Z M432 12.5h1.5v1.5h-1.5Z M429 14h3v1.5h-3Z M429 15.5h1.5v1.5h-1.5Z M432 15.5h1.5v1.5h-1.5Z M429 17h1.5v1.5h-1.5Z M432 17h1.5v1.5h-1.5Z" fill="#eee3c5"/><path d="M435 11h4.5v1.5h-4.5Z M435 12.5h1.5v1.5h-1.5Z M438 12.5h1.5v1.5h-1.5Z M435 14h1.5v1.5h-1.5Z M438 14h1.5v1.5h-1.5Z M435 15.5h1.5v1.5h-1.5Z M438 15.5h1.5v1.5h-1.5Z M435 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M441 11h4.5v1.5h-4.5Z M442.5 12.5h1.5v1.5h-1.5Z M442.5 14h1.5v1.5h-1.5Z M442.5 15.5h1.5v1.5h-1.5Z M442.5 17h1.5v1.5h-1.5Z" fill="#eee3c5"/><path d="M447 11h4.5v1.5h-4.5Z M447 12.5h1.5v1.5h-1.5Z M450 12.5h1.5v1.5h-1.5Z M447 14h1.5v1.5h-1.5Z M450 14h1.5v1.5h-1.5Z M447 15.5h1.5v1.5h-1.5Z M450 15.5h1.5v1.5h-1.5Z M447 17h4.5v1.5h-4.5Z" fill="#eee3c5"/>
-  <use href="#neighbor" x="5" y="20"/>
-  <use href="#punk" x="33" y="22"/>
-  <use href="#drinker" x="61" y="19"/>
-  <use href="#neighbor" x="91" y="23"/>
-  <use href="#punk" x="117" y="20"/>
-  <use href="#neighbor" x="146" y="18"/>
-  <use href="#drinker" x="174" y="22"/>
-  <use href="#punk" x="203" y="21"/>
-  <use href="#neighbor" x="231" y="19"/>
-  <use href="#drinker" x="261" y="23"/>
-  <use href="#punk" x="289" y="20"/>
-  <use href="#neighbor" x="317" y="22"/>
-  <use href="#drinker" x="345" y="18"/>
-  <use href="#punk" x="373" y="23"/>
-  <use href="#neighbor" x="401" y="20"/>
-  <use href="#drinker" x="430" y="22"/>
-  <use href="#punk" x="459" y="19"/>
-  <use href="#neighbor" x="487" y="23"/>
-  <use href="#drinker" x="18" y="35"/>
-  <use href="#neighbor" x="53" y="34"/>
-  <use href="#punk" x="87" y="37"/>
+  <g role="img" aria-label="Barro Sur"><path d="M81 4 L145 7 L141 23 L81 20 Z" fill="#eee3c5" stroke="#b93b36" stroke-width="1"/><path d="M86 10h3v1.5h-3Z M86 11.5h1.5v1.5h-1.5Z M89 11.5h1.5v1.5h-1.5Z M86 13h3v1.5h-3Z M86 14.5h1.5v1.5h-1.5Z M89 14.5h1.5v1.5h-1.5Z M86 16h3v1.5h-3Z" fill="#151412"/><path d="M93.5 10h1.5v1.5h-1.5Z M92 11.5h1.5v1.5h-1.5Z M95 11.5h1.5v1.5h-1.5Z M92 13h4.5v1.5h-4.5Z M92 14.5h1.5v1.5h-1.5Z M95 14.5h1.5v1.5h-1.5Z M92 16h1.5v1.5h-1.5Z M95 16h1.5v1.5h-1.5Z" fill="#151412"/><path d="M98 10h3v1.5h-3Z M98 11.5h1.5v1.5h-1.5Z M101 11.5h1.5v1.5h-1.5Z M98 13h3v1.5h-3Z M98 14.5h1.5v1.5h-1.5Z M101 14.5h1.5v1.5h-1.5Z M98 16h1.5v1.5h-1.5Z M101 16h1.5v1.5h-1.5Z" fill="#151412"/><path d="M104 10h3v1.5h-3Z M104 11.5h1.5v1.5h-1.5Z M107 11.5h1.5v1.5h-1.5Z M104 13h3v1.5h-3Z M104 14.5h1.5v1.5h-1.5Z M107 14.5h1.5v1.5h-1.5Z M104 16h1.5v1.5h-1.5Z M107 16h1.5v1.5h-1.5Z" fill="#151412"/><path d="M110 10h4.5v1.5h-4.5Z M110 11.5h1.5v1.5h-1.5Z M113 11.5h1.5v1.5h-1.5Z M110 13h1.5v1.5h-1.5Z M113 13h1.5v1.5h-1.5Z M110 14.5h1.5v1.5h-1.5Z M113 14.5h1.5v1.5h-1.5Z M110 16h4.5v1.5h-4.5Z" fill="#151412"/><path d="M122 10h4.5v1.5h-4.5Z M122 11.5h1.5v1.5h-1.5Z M122 13h4.5v1.5h-4.5Z M125 14.5h1.5v1.5h-1.5Z M122 16h4.5v1.5h-4.5Z" fill="#151412"/><path d="M128 10h1.5v1.5h-1.5Z M131 10h1.5v1.5h-1.5Z M128 11.5h1.5v1.5h-1.5Z M131 11.5h1.5v1.5h-1.5Z M128 13h1.5v1.5h-1.5Z M131 13h1.5v1.5h-1.5Z M128 14.5h1.5v1.5h-1.5Z M131 14.5h1.5v1.5h-1.5Z M128 16h4.5v1.5h-4.5Z" fill="#151412"/><path d="M134 10h3v1.5h-3Z M134 11.5h1.5v1.5h-1.5Z M137 11.5h1.5v1.5h-1.5Z M134 13h3v1.5h-3Z M134 14.5h1.5v1.5h-1.5Z M137 14.5h1.5v1.5h-1.5Z M134 16h1.5v1.5h-1.5Z M137 16h1.5v1.5h-1.5Z" fill="#151412"/></g>
+  <g role="img" aria-label="Ruido Roto"><path d="M389 5 L454 8 L450 24 L389 22 Z" fill="#b93b36" stroke="#eee3c5" stroke-width="1"/><path d="M393 11h3v1.5h-3Z M393 12.5h1.5v1.5h-1.5Z M396 12.5h1.5v1.5h-1.5Z M393 14h3v1.5h-3Z M393 15.5h1.5v1.5h-1.5Z M396 15.5h1.5v1.5h-1.5Z M393 17h1.5v1.5h-1.5Z M396 17h1.5v1.5h-1.5Z" fill="#eee3c5"/><path d="M399 11h1.5v1.5h-1.5Z M402 11h1.5v1.5h-1.5Z M399 12.5h1.5v1.5h-1.5Z M402 12.5h1.5v1.5h-1.5Z M399 14h1.5v1.5h-1.5Z M402 14h1.5v1.5h-1.5Z M399 15.5h1.5v1.5h-1.5Z M402 15.5h1.5v1.5h-1.5Z M399 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M405 11h4.5v1.5h-4.5Z M406.5 12.5h1.5v1.5h-1.5Z M406.5 14h1.5v1.5h-1.5Z M406.5 15.5h1.5v1.5h-1.5Z M405 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M411 11h3v1.5h-3Z M411 12.5h1.5v1.5h-1.5Z M414 12.5h1.5v1.5h-1.5Z M411 14h1.5v1.5h-1.5Z M414 14h1.5v1.5h-1.5Z M411 15.5h1.5v1.5h-1.5Z M414 15.5h1.5v1.5h-1.5Z M411 17h3v1.5h-3Z" fill="#eee3c5"/><path d="M417 11h4.5v1.5h-4.5Z M417 12.5h1.5v1.5h-1.5Z M420 12.5h1.5v1.5h-1.5Z M417 14h1.5v1.5h-1.5Z M420 14h1.5v1.5h-1.5Z M417 15.5h1.5v1.5h-1.5Z M420 15.5h1.5v1.5h-1.5Z M417 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M429 11h3v1.5h-3Z M429 12.5h1.5v1.5h-1.5Z M432 12.5h1.5v1.5h-1.5Z M429 14h3v1.5h-3Z M429 15.5h1.5v1.5h-1.5Z M432 15.5h1.5v1.5h-1.5Z M429 17h1.5v1.5h-1.5Z M432 17h1.5v1.5h-1.5Z" fill="#eee3c5"/><path d="M435 11h4.5v1.5h-4.5Z M435 12.5h1.5v1.5h-1.5Z M438 12.5h1.5v1.5h-1.5Z M435 14h1.5v1.5h-1.5Z M438 14h1.5v1.5h-1.5Z M435 15.5h1.5v1.5h-1.5Z M438 15.5h1.5v1.5h-1.5Z M435 17h4.5v1.5h-4.5Z" fill="#eee3c5"/><path d="M441 11h4.5v1.5h-4.5Z M442.5 12.5h1.5v1.5h-1.5Z M442.5 14h1.5v1.5h-1.5Z M442.5 15.5h1.5v1.5h-1.5Z M442.5 17h1.5v1.5h-1.5Z" fill="#eee3c5"/><path d="M447 11h4.5v1.5h-4.5Z M447 12.5h1.5v1.5h-1.5Z M450 12.5h1.5v1.5h-1.5Z M447 14h1.5v1.5h-1.5Z M450 14h1.5v1.5h-1.5Z M447 15.5h1.5v1.5h-1.5Z M450 15.5h1.5v1.5h-1.5Z M447 17h4.5v1.5h-4.5Z" fill="#eee3c5"/></g>
+  <use href="#punk" x="10" y="31"/>
+  <use href="#drinker" x="48" y="34"/>
+  <use href="#neighbor" x="85" y="30"/>
   <use href="#neighbor" x="125" y="35"/>
-  <use href="#drinker" x="162" y="36"/>
-  <use href="#punk" x="199" y="34"/>
-  <use href="#neighbor" x="236" y="37"/>
-  <use href="#drinker" x="273" y="35"/>
-  <use href="#neighbor" x="311" y="36"/>
-  <use href="#punk" x="348" y="34"/>
-  <use href="#drinker" x="386" y="37"/>
-  <use href="#neighbor" x="424" y="35"/>
-  <use href="#punk" x="473" y="36"/>
+  <use href="#punk" x="166" y="31"/>
+  <use href="#drinker" x="205" y="36"/>
+  <use href="#punk" x="244" y="32"/>
+  <use href="#neighbor" x="283" y="35"/>
+  <use href="#punk" x="322" y="32"/>
+  <use href="#neighbor" x="361" y="33"/>
+  <use href="#drinker" x="399" y="35"/>
+  <use href="#neighbor" x="440" y="31"/>
+  <use href="#drinker" x="480" y="34"/>
+  <use href="#neighbor" x="3" y="47"/>
+  <use href="#punk" x="45" y="46"/>
+  <use href="#drinker" x="89" y="49"/>
+  <use href="#punk" x="139" y="50"/>
+  <use href="#punk" x="194.75" y="46"/>
+  <use href="#neighbor" x="231.75" y="49"/>
+  <use href="#drinker" x="272" y="47"/>
+  <use href="#punk" x="322" y="49"/>
+  <use href="#neighbor" x="369" y="46"/>
+  <use href="#drinker" x="420" y="50"/>
+  <use href="#punk" x="470" y="47"/>
 </svg>

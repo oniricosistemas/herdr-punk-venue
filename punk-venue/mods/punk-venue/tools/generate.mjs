@@ -315,10 +315,10 @@ function salon() {
   return stageVariant(p);
 }
 
-// Crowd scale is deliberately smaller than the musicians. Two stencilled
-// shirts carry initials of the invented banner bands, not existing logos.
+// Two stencilled shirts carry initials of the invented banner bands, not existing logos.
+const fanFace = { x: 2, width: 5, height: 6 };
 function fan(x, y, punk = false, seated = false, shirt = 'denim', marked = false, gesture = 'rest') {
-  const p = [rect(x + 2, y, 5, 6, 'cream')];
+  const p = [rect(x + fanFace.x, y, fanFace.width, fanFace.height, 'cream')];
   p.push(punk ? path(`M${x + 1} ${y + 2} L${x + 1} ${y - 2} L${x + 4} ${y} L${x + 5} ${y - 4} L${x + 7} ${y - 1} L${x + 8} ${y + 3} Z`, 'red')
     : rect(x + 1, y - 1, 7, 3, 'black'));
   p.push(path(`M${x + 1} ${y + 6} H${x + 8} L${x + 10} ${y + 16} H${x - 1} Z`, shirt, 'black'));
@@ -336,27 +336,50 @@ function fan(x, y, punk = false, seated = false, shirt = 'denim', marked = false
 function neighbors() {
   return `<defs>\n    <g id="punk">${fan(0, 0, true, false, 'black', true, 'fist')}</g>\n    <g id="drinker">${fan(0, 0, false, false, 'green', false, 'bottle')}</g>\n    <g id="neighbor">${fan(0, 0, false, false, 'denim')}</g>\n    <g id="seated">${fan(0, 0, false, true, 'red')}</g>\n  </defs>`;
 }
+const crowdScale = 2.5;
+const fanFaceCenter = fanFace.x + fanFace.width / 2;
+// main.js centers the square overlays on these strip x coordinates.
+const crowdAnchors = [
+  { id: 'punk', center: 206, y: 46, band: 'Barro Sur' },
+  { id: 'neighbor', center: 243, y: 49, band: 'Ruido Roto' },
+];
+const anchoredFan = ({ id, center, y }) => [id, center - fanFaceCenter * crowdScale, y];
+function crowdFlag(name, outline, x, y, color) {
+  return `<g role="img" aria-label="${name}">${outline}${stencil(name.toUpperCase(), x, y, 1.5, color)}</g>`;
+}
 function crowd() {
-  // Larger heads/gestures survive the 0.78125 scale at 400x50. These
-  // definitions are crowd-only: the entrance's neighbors remain unchanged.
-  const p = [`<defs>\n    <g id="punk" transform="scale(1.5)">${fan(0, 0, true, false, 'black', true, 'fist')}</g>\n    <g id="drinker" transform="scale(1.5)">${fan(0, 0, false, false, 'green', false, 'bottle')}</g>\n    <g id="neighbor" transform="scale(1.5)">${fan(0, 0, false, false, 'denim')}</g>\n  </defs>`,
+  const p = [`<defs>\n    <g id="punk" transform="scale(${crowdScale})">${fan(0, 0, true, false, 'black', true, 'fist')}</g>\n    <g id="drinker" transform="scale(${crowdScale})">${fan(0, 0, false, false, 'green', false, 'bottle')}</g>\n    <g id="neighbor" transform="scale(${crowdScale})">${fan(0, 0, false, false, 'denim')}</g>\n  </defs>`,
     path('M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z', 'black'),
     path('M80 7 V39 M388 8 V40', 'none', 'mustard', 2),
-    path('M81 4 L145 7 L141 23 L81 20 Z', 'cream', 'red'), stencil('BARRO SUR', 86, 10, 1.5),
-    path('M389 5 L454 8 L450 24 L389 22 Z', 'red', 'cream'), stencil('RUIDO ROTO', 393, 11, 1.5, 'cream')];
-  // Two irregular rows span the full panel. Closer heads enter the bottom
-  // half; their bodies crop at the hem like a front row, not a lineup.
+    crowdFlag(crowdAnchors[0].band, path('M81 4 L145 7 L141 23 L81 20 Z', 'cream', 'red'), 86, 10, 'black'),
+    crowdFlag(crowdAnchors[1].band, path('M389 5 L454 8 L450 24 L389 22 Z', 'red', 'cream'), 393, 11, 'cream')];
+  // Front shoulders overlap the rear row. The hem crops the enlarged bodies;
+  // higher gestures stay clear of the two flag faces.
   for (const [id, x, y] of [
-    ['neighbor', 5, 20], ['punk', 33, 22], ['drinker', 61, 19], ['neighbor', 91, 23],
-    ['punk', 117, 20], ['neighbor', 146, 18], ['drinker', 174, 22], ['punk', 203, 21],
-    ['neighbor', 231, 19], ['drinker', 261, 23], ['punk', 289, 20], ['neighbor', 317, 22],
-    ['drinker', 345, 18], ['punk', 373, 23], ['neighbor', 401, 20], ['drinker', 430, 22],
-    ['punk', 459, 19], ['neighbor', 487, 23],
-    ['drinker', 18, 35], ['neighbor', 53, 34], ['punk', 87, 37], ['neighbor', 125, 35],
-    ['drinker', 162, 36], ['punk', 199, 34], ['neighbor', 236, 37], ['drinker', 273, 35],
-    ['neighbor', 311, 36], ['punk', 348, 34], ['drinker', 386, 37], ['neighbor', 424, 35], ['punk', 473, 36],
+    ['punk', 10, 31], ['drinker', 48, 34], ['neighbor', 85, 30], ['neighbor', 125, 35],
+    ['punk', 166, 31], ['drinker', 205, 36], ['punk', 244, 32], ['neighbor', 283, 35],
+    ['punk', 322, 32], ['neighbor', 361, 33], ['drinker', 399, 35], ['neighbor', 440, 31],
+    ['drinker', 480, 34],
+    ['neighbor', 3, 47], ['punk', 45, 46], ['drinker', 89, 49], ['punk', 139, 50],
+    ...crowdAnchors.map(anchoredFan), ['drinker', 272, 47], ['punk', 322, 49],
+    ['neighbor', 369, 46], ['drinker', 420, 50], ['punk', 470, 47],
   ]) p.push(use(id, x, y));
   return p;
+}
+function saveCrowd() {
+  save('crowd', 'Ultra-wide front row; invented bands Barro Sur and Ruido Roto', crowd(), 512);
+  // At a 4:1 stage the square moving layer spans roughly 13 crowd units.
+  // Keep hair and raised arms in the base; move only an inset of the larger
+  // face so the square doesn't draw a second, undersized silhouette.
+  const zoom = 64 * crowdScale / 13;
+  for (const { id, band } of crowdAnchors) {
+    const inset = rect(fanFace.x + 0.5, 2, fanFace.width - 1, fanFace.height - 3.5, 'cream');
+    const eyes = rect(fanFace.x + 1, 2.5, 1, 0.9, 'black')
+      + rect(fanFace.x + 3.1, 2.5, 1, 0.9, 'black');
+    save(`crowd-front-${id}`, `${band} front row; moving face detail`, [
+      `<g transform="translate(32 32) scale(${number(zoom)}) translate(${-fanFaceCenter} -3.25)">${inset}${eyes}</g>`,
+    ]);
+  }
 }
 function entrance() {
   const p = [...wall(), neighbors(), rect(0, 54, 256, 10, 'green'),
@@ -380,13 +403,18 @@ function entrance() {
 }
 
 mkdirSync(out, { recursive: true });
+if (process.argv.length === 3 && process.argv[2] === '--crowd-only') {
+  saveCrowd();
+  console.log('Generated 3 crowd SVGs in punk-venue/mods/punk-venue/art/');
+  process.exit(0);
+}
 for (const kind of ['guitar', 'bass', 'drums', 'singer', 'guitar2', 'keys', 'sax']) {
   for (const state of ['working', 'idle', 'blocked', 'done']) {
     save(`${kind}-${state}`, `${kind}: ${state}; original DIY gig musician`, person(kind, state));
   }
 }
 save('backdrop', 'Barro Sur: wide brick and corrugated-tin DIY stage', backdrop(), 256);
-save('crowd', 'Ultra-wide front row; invented bands Barro Sur and Ruido Roto', crowd(), 512);
+saveCrowd();
 save('entrance', 'Shared venue entrance: ENTRADA, queue and neighbors drinking beer', entrance(), 256);
 save('empty-guitar', 'Unoccupied guitar and amplifier; no person', [amp(7, 40), strings('guitar', true), path('M30 50 L26 59 H39 L35 50', 'none', 'denim', 2)]);
 save('empty-bass', 'Unoccupied bass and amplifier; no person', [amp(7, 40), strings('bass', true), path('M30 50 L26 59 H39 L35 50', 'none', 'denim', 2)]);
@@ -398,4 +426,4 @@ save('backdrop-club', 'Cramped brick club; real-band gig banners under an amber 
 save('backdrop-galpon', 'Cold corrugated warehouse; real-band banners and stacked road crates', galpon(), 256);
 save('backdrop-plaza', 'Open-air plaza stage; real-band flags, horizon and suspended bulbs', plaza(), 256);
 save('backdrop-salon', 'Community hall; bunting, real-band posters and plastic chairs', salon(), 256);
-console.log('Generated 41 SVGs in punk-venue/mods/punk-venue/art/');
+console.log('Generated 43 SVGs in punk-venue/mods/punk-venue/art/');
