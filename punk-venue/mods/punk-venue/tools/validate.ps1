@@ -91,6 +91,21 @@ function Assert-InstrumentLayers($doc, $name, $kind, $pose) {
             }
         }
     }
+    # The sticks are the last thing painted on the drums, so a moved stick path would look
+    # like a hand passing through the kit. Nothing else pins their position.
+    if ($kind -eq 'drums' -and $pose -in @('working', 'strike')) {
+        $sticks = @()
+        for ($i = 0; $i -lt $shapes.Count; $i++) {
+            $shape = $shapes[$i]
+            if ($shape.LocalName -eq 'path' -and $shape.GetAttribute('stroke') -ceq '#c4a34f' -and
+                $shape.GetAttribute('stroke-width') -eq '2' -and $shape.GetAttribute('d') -match 'M49 22 L55 12$') {
+                $sticks += $i
+            }
+        }
+        if ($sticks.Count -ne 1 -or $sticks[0] -le ($gearIndex + $count - 1)) {
+            throw "${name}: drumsticks must paint in front of the kit"
+        }
+    }
     if ($gearIndex -lt 0 -or $sleeves.Count -ne 4 -or $hands.Count -ne 2 -or
         @($sleeves | Where-Object { $_ -ge $gearIndex }).Count -ne 0 -or
         @($hands | Where-Object { $_ -lt ($gearIndex + $count) }).Count -ne 0) {
