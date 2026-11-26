@@ -24,6 +24,17 @@ From the repository/workspace root:
 node punk-venue/mods/punk-venue/tools/generate.mjs
 ```
 
+Run the banner layout and entrance queue timer tests directly with Node:
+
+```sh
+node --test punk-venue/mods/punk-venue/tools/banner-layout.test.mjs
+node --test punk-venue/mods/punk-venue/tools/queue-walk.test.mjs
+```
+
+The queue test drives the mod's timer callback with stubbed layout and agent
+inputs. It checks frame order, timer reuse, notifications, cancellation, and
+the one-tick paint lease without launching Herdr or judging visual quality.
+
 XML and deterministic-regeneration validation on Windows, using built-in .NET:
 
 ```sh
