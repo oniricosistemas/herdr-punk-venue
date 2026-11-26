@@ -308,7 +308,7 @@ export default class PunkVenue extends View {
     const artLeft = Math.max(0, Math.round((sceneWidth - artWidth) / 2));
     const button = (id, label, action) => div().id(id).px(6).py(2).rounded(3).flex_none().border(1).border_color(t.border)
       .bg(t.chrome).text_color(t.accent).cursor_pointer().hover(s => s.bg(t.hover)).on_click(action).child(label);
-    const rowCard = (r, stage, poster = false) => v_flex().id(r.key).flex_none().min_w(0).h(56).px(7).py(4).gap(2)
+    const rowCard = (r, stage, poster = false) => v_flex().id(r.key).flex_none().min_w(0).h(40).px(7).py(2).gap(1)
       .bg(r.active ? t.selected : t.surface).border(poster ? 2 : 1)
       .border_color(this.handle.is_focused() && this.stage === stage && this.selected[stage] === r.key ? t.accent : r.active ? t.ansi5 : t.border)
       .rounded(3).cursor_pointer().hover(s => s.bg(t.hover)).tooltip(`${r.name}\n${r.context}\n${stateText(r.status)}`)
@@ -469,10 +469,12 @@ export default class PunkVenue extends View {
       const rows = groups[2], at = Math.max(0, rows.findIndex(r => r.key === this.selected[2]));
       const page = Math.floor(at / PAGE);
       return v_flex().id("list-2").h(bodyHeight).flex_none().min_w(0).gap(4).overflow_y_scrollbar().track_scroll(this.scroll[2])
-        .children(page === 0 ? band.slots.slice(0, Math.max(4, band.slots.reduce((n, a, i) => a ? i + 1 : n, 0))).map((a, i) => a
+        // The stage always shows seven positions, so the list does too: an empty slot keeps
+        // its gear row instead of vanishing as soon as somebody reports.
+        .children(page === 0 ? band.slots.map((a, i) => a
           ? rowCard(rows.find(r => r.key === `agent:${a.address}`), 2)
-          : h_flex().id(`empty-${i}`).h(40).flex_none().gap(4).items_center().text_color(t.muted)
-            .child(art(`empty-${EMPTY[i]}`).w(32).h(32)).child(`${PARTS[i]} / empty`)) : [])
+          : h_flex().id(`empty-${i}`).h(26).flex_none().gap(4).items_center().text_color(t.muted)
+            .child(art(`empty-${EMPTY[i]}`).w(22).h(22)).child(`${PARTS[i]} / empty`)) : [])
         .when(band.overflow.length, el => el.child(div().text_color(t.muted).child(`+${band.overflow.length} overflow / off stage`)))
         .children(rows.slice(page * PAGE, (page + 1) * PAGE).filter(r => !band.slots.some(a => a && r.key === `agent:${a.address}`)).map(r => rowCard(r, 2)));
     };
