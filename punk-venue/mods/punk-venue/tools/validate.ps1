@@ -59,6 +59,44 @@ $walkFrames = @(foreach ($walker in $walkers) {
 })
 $expected = $generatedNames + $additions + $walkFrames
 $squareNames = @($originalGeneratedNames | Where-Object { $_ -notin $scenes })
+# First instrument shape and number of adjacent top-level instrument shapes.
+# Idle strings wrap their shapes in one rotated group instead.
+$stringLayers = @('M23 33 L29 31', 6)
+$instrumentLayers = @{
+    guitar = $stringLayers; bass = $stringLayers; guitar2 = $stringLayers
+    sax = @('M35 23 L40 25', 6)
+    keys = @('M19 43 L44 59', 12)
+    drums = @('M13 32 V56', 11)
+}
+function Assert-InstrumentLayers($doc, $name, $kind, $pose) {
+    $shapes = @($doc.DocumentElement.ChildNodes)
+    $rotate = $pose -eq 'idle' -and $kind -in @('guitar', 'bass', 'guitar2')
+    $start, $count = $instrumentLayers[$kind]
+    if ($rotate) { $count = 1 }
+    $gearIndex = -1
+    $sleeves = @()
+    $hands = @()
+    for ($i = 0; $i -lt $shapes.Count; $i++) {
+        $shape = $shapes[$i]
+        if (($rotate -and $shape.GetAttribute('transform') -ceq 'rotate(-22 32 40)') -or
+            (!$rotate -and $shape.GetAttribute('d').StartsWith($start))) { $gearIndex = $i }
+        if ($shape.LocalName -eq 'path' -and $shape.GetAttribute('stroke-width') -in @('5', '7') -and
+            $shape.GetAttribute('d') -match '^M(?:25|38) 24 L\d+ \d+ L(\d+) (\d+)$') {
+            $sleeves += $i
+            if ($shape.GetAttribute('stroke-width') -eq '5') {
+                $x = [int]$Matches[1] - 2
+                $y = [int]$Matches[2] - 2
+                $hand = $doc.SelectSingleNode("/*/*[local-name()='rect' and @x='$x' and @y='$y' and @width='5' and @height='5' and @fill='#eee3c5']")
+                $hands += [array]::IndexOf($shapes, $hand)
+            }
+        }
+    }
+    if ($gearIndex -lt 0 -or $sleeves.Count -ne 4 -or $hands.Count -ne 2 -or
+        @($sleeves | Where-Object { $_ -ge $gearIndex }).Count -ne 0 -or
+        @($hands | Where-Object { $_ -lt ($gearIndex + $count) }).Count -ne 0) {
+        throw "${name}: sleeves must paint behind the instrument and hands in front"
+    }
+}
 if (@(Compare-Object ($squareNames | Sort-Object) ($squareHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Square-asset preservation manifest does not match the 34 expected names'
 }
@@ -87,6 +125,9 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
             $doc.DocumentElement.GetAttribute('width') -cne $width -or
             $doc.DocumentElement.GetAttribute('height') -cne '64') {
             throw "$($file.Name): wrong SVG root, namespace, dimensions or viewBox"
+        }
+        if ($file.Name -match '^(guitar2?|bass|sax|keys|drums)-(working|idle|blocked|done|strike)\.svg$') {
+            Assert-InstrumentLayers $doc $file.Name $Matches[1] $Matches[2]
         }
         if ($file.Name -eq 'crowd.svg') {
             $fans = @($doc.SelectNodes('/*/*[local-name()="defs"]/*[local-name()="g"]'))

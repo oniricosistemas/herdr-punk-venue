@@ -13,9 +13,8 @@ The stage and idle scenes (`backdrop.svg`, `entrance.svg`) plus the four
 `width="256" height="64" viewBox="0 0 256 64"` (4:1). The front-row overlay
 `crowd.svg` declares `width="512" height="64" viewBox="0 0 512 64"` (8:1), so
 it fills a 400 x 50 strip without consuming the stage height. The 28 musicians and six empty
-gear assets remain `width="64" height="64" viewBox="0 0 64 64"`, byte-identical
-to their pre-revision versions. Scenes are recomposed across the wide canvas,
-not horizontally stretched square art.
+gear assets remain `width="64" height="64" viewBox="0 0 64 64"`. Scenes are
+recomposed across the wide canvas, not horizontally stretched square art.
 
 Regenerate the crowd strip, its runtime backplate and its two cutouts from the repository root:
 
@@ -61,13 +60,18 @@ XML parsing with DTDs prohibited and resolution disabled, SVG namespace,
 dimensions/viewBox, an element/attribute allowlist, palette, distinct state
 files, and the 8 KiB budget. Scene-local `defs`/`use` reuse deterministic shape
 groups; every `href` must be an internal fragment resolving within that SVG.
-`square-sha256.json` records all 34 square assets before this revision; their
-hashes are checked before and after regeneration. `scene-sha256.json` adds
+`square-sha256.json` pins all 34 generated musician and gear assets before
+and after regeneration. The sleeve-order change updates only the four state
+files each for guitar, bass, guitar2, keys, drums and sax (24 entries). The
+singer and empty gear hashes are unchanged. Strike poses are hand-authored
+and checked in the shipped inventory, not generated or pinned by this manifest.
+The validator checks the sleeve–instrument–hand order on all five poses of
+the six reordered musicians. `scene-sha256.json` adds
 the three original scene hashes captured before the T7 increment. Only its
 `entrance.svg` entry was updated for the neutral ENTRADA sign and named poster.
 The validator pins separate authorized hashes for the shipped entrance, crowd
-strip and runtime backplate; the manifest's fallback/crowd entries and the entire
-square manifest remain unchanged. The two cutouts are checked against deterministic
+strip and runtime backplate; the scene manifest's fallback/crowd entries
+remain unchanged. The two cutouts are checked against deterministic
 regeneration, not a preservation manifest. Variant hashes are compared across regeneration, not stored
 in a preservation manifest. Do not refresh preservation manifests to conceal
 an unintended change. The validator also checks exact accessible band names,
@@ -108,9 +112,11 @@ not judge visual quality.
 
 ## Silhouettes and scene
 
-- **working:** elbows bent into the instrument: strumming/plucking arm across
-  guitar/bass, lifted drumsticks, both hands on keys, hands around sax, singer
-  gripping the microphone near the mouth with the other arm reaching outward.
+- **working:** guitar, bass and sax sleeves tuck behind the instrument while
+  the hands stay in front; keyboard and drum sleeves stay behind their playing
+  surfaces, with hands and drumsticks in front. The singer grips the mic near
+  the mouth with the other arm reaching outward. This layering also holds in
+  the strike and non-playing poses.
 - **idle:** a present, upright musician, both arms resting down outside the
   torso. Guitars/bass hang more vertically. Gear remains visible.
 - **blocked:** front-facing, one arm extended horizontally with a pointing

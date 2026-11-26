@@ -132,14 +132,16 @@ function person(kind, state) {
     pieces.push(path('M24 13 L24 8 L28 6 L36 7 L39 13 L33 11 L28 13 Z', kind === 'keys' ? 'mustard' : 'black', 'denim'));
   }
   pieces.push(rect(27, 14, 2, 2, 'black'), rect(34, 14, 2, 2, 'black'), rect(30, 19, 3, 1, 'black'));
-  // Gear stays present in every state; only idle strings hang vertically.
+  // Gear with a playing surface goes between the sleeves and the hands.
+  // Keep the guitar strap on the torso and the singer's mic behind the grip.
+  let foregroundGear;
   if (['guitar', 'bass', 'guitar2'].includes(kind)) {
-    pieces.push(path('M25 23 L36 41', 'none', 'mustard', 2), strings(kind, state === 'idle'));
-  }
-  if (kind === 'drums') pieces.push(kit());
-  if (kind === 'keys') pieces.push(keyboard());
-  if (kind === 'sax') pieces.push(sax());
-  if (kind === 'singer') pieces.push(mic());
+    pieces.push(path('M25 23 L36 41', 'none', 'mustard', 2));
+    foregroundGear = strings(kind, state === 'idle');
+  } else if (kind === 'drums') foregroundGear = kit();
+  else if (kind === 'keys') foregroundGear = keyboard();
+  else if (kind === 'sax') foregroundGear = sax();
+  else if (kind === 'singer') pieces.push(mic());
 
   let arms;
   if (done) arms = [[25, 24, 16, 17, 12, 5], [38, 24, 47, 17, 51, 5]];
@@ -156,11 +158,13 @@ function person(kind, state) {
       sax: [[25, 24, 23, 33, 34, 37], [38, 24, 43, 31, 38, 43]],
     }[kind];
   }
+  const hands = [];
   for (const [sx, sy, ex, ey, hx, hy] of arms) {
     pieces.push(path(`M${sx} ${sy} L${ex} ${ey} L${hx} ${hy}`, 'none', 'black', 7));
     pieces.push(path(`M${sx} ${sy} L${ex} ${ey} L${hx} ${hy}`, 'none', shirt, 5));
-    pieces.push(rect(hx - 2, hy - 2, 5, 5, 'cream'));
+    (foregroundGear ? hands : pieces).push(rect(hx - 2, hy - 2, 5, 5, 'cream'));
   }
+  if (foregroundGear) pieces.push(foregroundGear, ...hands);
   if (state === 'blocked') {
     pieces.push(rect(55, 21, 6, 2, 'cream'), rect(9, 16, 2, 6, 'cream'), rect(12, 16, 2, 6, 'cream'));
   }
