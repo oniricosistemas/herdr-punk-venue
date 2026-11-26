@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
   <title>Ruido Roto front row; moving figure</title>
-  <g transform="translate(20.75 46) scale(2.5)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+  <g transform="translate(23 46) scale(2)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
   <rect x="1" y="-1" width="7" height="3" fill="#151412"/>
   <path d="M1 6 H8 L10 16 H-1 Z" fill="#627b88" stroke="#151412" stroke-width="1"/>
   <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>

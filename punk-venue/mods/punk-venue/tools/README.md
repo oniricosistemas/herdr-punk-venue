@@ -142,9 +142,9 @@ These are composition and geometry expectations, not a new optical review.
   glyphs are roughly 11-16 screen pixels high; the cream cloth reads as a
   photocopied gig banner without becoming a centered miniature scene.
 - **crowd at 400 x 50:** 24 figures instead of 31, arranged in two staggered,
-  overlapping rows. Crowd-only 2.5x shape groups make the face 15 canvas units
-  tall instead of 9 (about 12 display pixels instead of 7), without changing
-  the strip height or the entrance figures. The hem crops lower bodies so
+  overlapping rows. Crowd-only 2x shape groups make the face 12 canvas units
+  tall (1.33x the original 9; about 9 display pixels instead of 7), without
+  changing the strip height or the entrance figures. The hem crops lower bodies so
   there is room for faces, mohawks, raised fists and bent bottle-holding arms.
   Both invented flags and their uppercase stencils remain unobstructed.
   Their roughly 6-pixel-high lettering is still poster texture at this size.

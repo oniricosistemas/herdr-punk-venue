@@ -344,7 +344,7 @@ const entranceFan = {
 function neighbors() {
   return `<defs>\n${Object.entries(entranceFan).map(([id, draw]) => `    <g id="${id}">${draw(0, 0)}</g>`).join('\n')}\n  </defs>`;
 }
-const crowdScale = 2.5;
+const crowdScale = 2;
 const fanFaceCenter = fanFace.x + fanFace.width / 2;
 // main.js centers the square overlays on these strip x coordinates.
 const crowdAnchors = [

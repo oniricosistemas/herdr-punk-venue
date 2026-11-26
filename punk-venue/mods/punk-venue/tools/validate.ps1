@@ -15,8 +15,8 @@ $squareHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'square-sha256
 $sceneHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'scene-sha256.json') -Raw | ConvertFrom-Json
 # S8 projects nine known figure instances out of the preserved entrance.
 $shippedEntranceHash = '0e78ad1a938b46ca9b4e1c15cc3c3cd8377b98ee721ad91204b40f1eb36198f7'
-# S9 redraw; keep the original crowd SHA-256 in the preservation manifest.
-$authorizedCrowdHash = '8a89c581ff2e1b92f80e18be314090c229c308765f8f5fe8722a83fa7558f1bc'
+# S9 redraw with 12-unit heads; keep the original crowd SHA-256 in the preservation manifest.
+$authorizedCrowdHash = '5b077071733706dee56a7dfc7f39e3e7d494a1a6a91d58eb92006b88b46122ef'
 if (@(Compare-Object ($originalScenes | Sort-Object) ($sceneHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Original-scene preservation manifest must contain exactly the 3 original scenes'
 }
@@ -95,8 +95,8 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
                 }
                 $scale = [double]::Parse($Matches[1], [Globalization.CultureInfo]::InvariantCulture)
                 $headHeight = [int]$face.GetAttribute('height') * $scale
-                if ($headHeight -lt (9 * 1.4) -or $headHeight -gt (9 * 1.75)) {
-                    throw "crowd.svg: head height $headHeight does not enlarge the original 9 units by 1.4x to 1.75x"
+                if ($headHeight -ne 12) {
+                    throw "crowd.svg: head height $headHeight must be 12 canvas units"
                 }
                 $pose = $fan.GetAttribute('id')
                 if ($crowdAnchors.ContainsKey($pose)) {
