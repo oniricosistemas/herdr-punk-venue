@@ -24,7 +24,6 @@ const stageOf = id => {
 const stateText = status => status ?? "no reporting agents";
 const art = name => image(`mods/punk-venue/art/${name}.svg`);
 const STEP_PERIOD = 800;
-const IDLE_PERIOD = 1800;
 const WALK_TICK = 100;
 // A pose's hold and a person's phase are measured in 100 ms ticks. The shared
 // drinker/seated pairs use staggered holds so they never show the same pose.
@@ -333,7 +332,9 @@ export default class PunkVenue extends View {
       // into the left third when few agents report, and no figure shifts when a member joins.
       const children = band.slots.map((a, i) => {
         const part = PARTS[i];
-        const period = a?.status === "working" ? STEP_PERIOD : a?.status === "idle" ? IDLE_PERIOD : null;
+        // Only a working agent plays. An idle one stands with its instrument: animating the
+        // strike pose here read as "still playing while nothing happens".
+        const period = a?.status === "working" ? STEP_PERIOD : null;
         const still = art(a ? `${part}-${a.status}` : `empty-${EMPTY[i]}`).w(figure).h(figure);
         return div().id(`figure-${part}`).absolute().left(figureLeft(i)).top(figureTop).w(figure).h(figure + 3)
           .child(div().id(`motion-${part}`).relative().top(0).w(figure).h(figure)
