@@ -66,12 +66,13 @@ hashes are checked before and after regeneration. `scene-sha256.json` adds
 the three original scene hashes captured before the T7 increment. Only its
 `entrance.svg` entry was updated for the neutral ENTRADA sign and named poster.
 The validator pins separate authorized hashes for the shipped entrance and the
-S9 crowd redraw; the manifest's fallback/crowd entries and the entire square
+S9 crowd redraw without flags; the manifest's fallback/crowd entries and the entire square
 manifest remain unchanged. The two cutouts are checked against deterministic
 regeneration, not a preservation manifest. Variant hashes are compared across regeneration, not stored
 in a preservation manifest. Do not refresh preservation manifests to conceal
 an unintended change. The validator also checks exact accessible band names,
 uppercase glyph spelling, line counts, condensation and scene uniqueness.
+Both crowd strips must be free of flags, poles and their labels.
 Variants must finish with solid near-black clearance masks
 for the band and crowd zones. The validator cleans its scratch files and does
 not judge visual quality.
@@ -122,10 +123,10 @@ not judge visual quality.
 
 The corrugated shed roof, exposed brick, taped photocopied bills, fraying
 cloth banner, beer cups, mixed punk/neighborhood queue and seated spectators
-establish the DIY venue rather than a neon/cyberpunk setting. Only the protected
-generic fallback and crowd retain the invented Barro Sur / Ruido Roto banners;
-the crowd flags expose those exact accessible names, and the legacy `BS` shirt
-stencils remain unchanged. The four venue variants now use
+establish the DIY venue rather than a neon/cyberpunk setting. The protected
+generic fallback retains the invented Barro Sur / Ruido Roto lettering on its
+center cloth. Both crowd strips omit the flags and poles; the legacy `BS` shirt
+stencils remain unchanged. The four venue variants use
 the owner's real-band mapping below. All lettering is hand-defined 3x5 shape
 geometry, not text/font rendering.
 
@@ -146,8 +147,8 @@ These are composition and geometry expectations, not a new optical review.
   tall (1.33x the original 9; about 9 display pixels instead of 7), without
   changing the strip height or the entrance figures. The hem crops lower bodies so
   there is room for faces, mohawks, raised fists and bent bottle-holding arms.
-  Both invented flags and their uppercase stencils remain unobstructed.
-  Their roughly 6-pixel-high lettering is still poster texture at this size.
+  With the flags and poles gone, the first painted crowd shape is a raised
+  fist at art `y=13`, leaving the top 13 of 64 units transparent.
   The two cutouts are 64-unit square crops at the strip's 1:1 art scale,
   centered on the same front-row faces at x=206 and x=243. They show the whole
   figure down to the original hem, with a 0.5–2 unit upward offset for the
@@ -201,8 +202,7 @@ These are real band names used at the owner's request for a personal desktop
 scene. The package must not be redistributed publicly with them without
 permission. No logo, album art or distinctive band lettering was copied.
 This owner-approved increment replaces the earlier invented-only rule for the
-four variants and entrance poster; the fallback and crowd keep their invented
-names.
+four variants and entrance poster; the fallback keeps its invented lettering.
 
 The generator's `banner()` helper uses `layoutBanner()` from
 `banner-layout.mjs`. Up to 11 characters use one line; 12-16 use two lines at

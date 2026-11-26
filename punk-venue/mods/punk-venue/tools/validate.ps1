@@ -15,8 +15,8 @@ $squareHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'square-sha256
 $sceneHashes = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'scene-sha256.json') -Raw | ConvertFrom-Json
 # S8 projects nine known figure instances out of the preserved entrance.
 $shippedEntranceHash = '0e78ad1a938b46ca9b4e1c15cc3c3cd8377b98ee721ad91204b40f1eb36198f7'
-# S9 redraw with 12-unit heads; keep the original crowd SHA-256 in the preservation manifest.
-$authorizedCrowdHash = '5b077071733706dee56a7dfc7f39e3e7d494a1a6a91d58eb92006b88b46122ef'
+# S9 redraw with 12-unit heads, now without the two flags. Keep the original manifest hash.
+$authorizedCrowdHash = 'ca6252a00b737c43d22855f20141f6cc327f85c11a781a950c2e64fe1e13d861'
 if (@(Compare-Object ($originalScenes | Sort-Object) ($sceneHashes.PSObject.Properties.Name | Sort-Object)).Count -ne 0) {
     throw 'Original-scene preservation manifest must contain exactly the 3 original scenes'
 }
@@ -113,9 +113,13 @@ function Assert-Art($directory, $inventory, [switch]$ShippedEntrance) {
             if ($fans.Count -ne 3 -or $figures.Count -ne 24) {
                 throw 'crowd.svg: expected 24 figures in three poses'
             }
-            $flagNames = @($doc.SelectNodes('/*/*[@role="img"]') | ForEach-Object { $_.GetAttribute('aria-label') })
-            if (($flagNames -join '|') -cne 'Barro Sur|Ruido Roto') {
-                throw 'crowd.svg: missing invented flag names or incorrect accessible casing'
+        }
+        if ($file.Name -in @('crowd.svg', 'crowd-backplate.svg')) {
+            # The hem is the only standalone painted shape; figures are defs/use.
+            $standalone = $doc.SelectNodes('/*/*[not(local-name()="title" or local-name()="defs" or local-name()="use")]')
+            if ($doc.SelectNodes('//*[@role or @aria-label]').Count -ne 0 -or
+                $standalone.Count -ne 1 -or $standalone[0].LocalName -ne 'path') {
+                throw "$($file.Name): expected only the crowd hem and figure shapes, without flags, poles or labels"
             }
         }
         if (($file.Name -in @('crowd.svg', 'crowd-backplate.svg') -or $file.Name -in $crowdCutouts) -and
@@ -300,7 +304,7 @@ $largest = Get-ChildItem -LiteralPath $art -File | Sort-Object Length -Descendin
 Write-Output "PASS: $($expected.Count) XML SVGs; exact filenames, safe local shapes, six-color palette, all under 8 KiB."
 Write-Output "PASS: wide scenes, $($walkFrames.Count) preserved walk frames and $($queueFrames.Count) new queue poses have matching viewBoxes; crowd and its backplate are 512x64 (8:1)."
 Write-Output "PASS: fallback and 34 square SVGs match preserved SHA-256; crowd and entrance match their authorized updated hashes."
-Write-Output "PASS: 24 larger crowd figures, two anchored figure cutouts, exact invented flag names and crisp edges."
+Write-Output "PASS: 24 larger crowd figures, two anchored figure cutouts, no flags or poles on either strip, and crisp edges."
 Write-Output "PASS: 13 distinct real band names, exact accessible casing, uppercase shape spelling, no scene repeats; neutral ENTRADA sign."
 Write-Output "PASS: 4 variants reserve dark lower-center musician and bottom-eighth crowd zones."
 Write-Output "PASS: two generator runs and shipped art are byte-identical (SHA-256, all $($generatedNames.Count) generated files, including all $($originalGeneratedNames.Count) originals). The preserved entrance matches its original SHA-256 and has exactly nine authorized figure removals."

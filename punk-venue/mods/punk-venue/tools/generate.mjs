@@ -352,17 +352,10 @@ const crowdAnchors = [
   { id: 'neighbor', center: 243, y: 49, band: 'Ruido Roto' },
 ];
 const anchoredFan = ({ id, center, y }) => [id, center - fanFaceCenter * crowdScale, y];
-function crowdFlag(name, outline, x, y, color) {
-  return `<g role="img" aria-label="${name}">${outline}${stencil(name.toUpperCase(), x, y, 1.5, color)}</g>`;
-}
 function crowd(backplate = false) {
   const p = [`<defs>\n    <g id="punk" transform="scale(${crowdScale})">${fan(0, 0, true, false, 'black', true, 'fist')}</g>\n    <g id="drinker" transform="scale(${crowdScale})">${fan(0, 0, false, false, 'green', false, 'bottle')}</g>\n    <g id="neighbor" transform="scale(${crowdScale})">${fan(0, 0, false, false, 'denim')}</g>\n  </defs>`,
-    path('M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z', 'black'),
-    path('M80 7 V39 M388 8 V40', 'none', 'mustard', 2),
-    crowdFlag(crowdAnchors[0].band, path('M81 4 L145 7 L141 23 L81 20 Z', 'cream', 'red'), 86, 10, 'black'),
-    crowdFlag(crowdAnchors[1].band, path('M389 5 L454 8 L450 24 L389 22 Z', 'red', 'cream'), 393, 11, 'cream')];
-  // Front shoulders overlap the rear row. The hem crops the enlarged bodies;
-  // higher gestures stay clear of the two flag faces.
+    path('M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z', 'black')];
+  // Front shoulders overlap the rear row. The hem crops the enlarged bodies.
   for (const [id, x, y] of [
     ['punk', 10, 31], ['drinker', 48, 34], ['neighbor', 85, 30], ['neighbor', 125, 35],
     ['punk', 166, 31], ['drinker', 205, 36], ['punk', 244, 32], ['neighbor', 283, 35],
@@ -375,7 +368,7 @@ function crowd(backplate = false) {
   return p;
 }
 function saveCrowd() {
-  save('crowd', 'Ultra-wide front row; invented bands Barro Sur and Ruido Roto', crowd(), 512);
+  save('crowd', 'Ultra-wide front row', crowd(), 512);
   // Keep the reference crowd intact; the runtime backplate removes exactly
   // the two figures that are now painted at full scale by the moving layers.
   save('crowd-backplate', 'Front row without the two moving figures', crowd(true), 512);
