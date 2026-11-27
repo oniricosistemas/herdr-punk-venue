@@ -132,14 +132,16 @@ function person(kind, state) {
     pieces.push(path('M24 13 L24 8 L28 6 L36 7 L39 13 L33 11 L28 13 Z', kind === 'keys' ? 'mustard' : 'black', 'denim'));
   }
   pieces.push(rect(27, 14, 2, 2, 'black'), rect(34, 14, 2, 2, 'black'), rect(30, 19, 3, 1, 'black'));
-  // Gear stays present in every state; only idle strings hang vertically.
+  // Gear with a playing surface goes between the sleeves and the hands.
+  // Keep the guitar strap on the torso and the singer's mic behind the grip.
+  let foregroundGear;
   if (['guitar', 'bass', 'guitar2'].includes(kind)) {
-    pieces.push(path('M25 23 L36 41', 'none', 'mustard', 2), strings(kind, state === 'idle'));
-  }
-  if (kind === 'drums') pieces.push(kit());
-  if (kind === 'keys') pieces.push(keyboard());
-  if (kind === 'sax') pieces.push(sax());
-  if (kind === 'singer') pieces.push(mic());
+    pieces.push(path('M25 23 L36 41', 'none', 'mustard', 2));
+    foregroundGear = strings(kind, state === 'idle');
+  } else if (kind === 'drums') foregroundGear = kit();
+  else if (kind === 'keys') foregroundGear = keyboard();
+  else if (kind === 'sax') foregroundGear = sax();
+  else if (kind === 'singer') pieces.push(mic());
 
   let arms;
   if (done) arms = [[25, 24, 16, 17, 12, 5], [38, 24, 47, 17, 51, 5]];
@@ -156,11 +158,13 @@ function person(kind, state) {
       sax: [[25, 24, 23, 33, 34, 37], [38, 24, 43, 31, 38, 43]],
     }[kind];
   }
+  const hands = [];
   for (const [sx, sy, ex, ey, hx, hy] of arms) {
     pieces.push(path(`M${sx} ${sy} L${ex} ${ey} L${hx} ${hy}`, 'none', 'black', 7));
     pieces.push(path(`M${sx} ${sy} L${ex} ${ey} L${hx} ${hy}`, 'none', shirt, 5));
-    pieces.push(rect(hx - 2, hy - 2, 5, 5, 'cream'));
+    (foregroundGear ? hands : pieces).push(rect(hx - 2, hy - 2, 5, 5, 'cream'));
   }
+  if (foregroundGear) pieces.push(foregroundGear, ...hands);
   if (state === 'blocked') {
     pieces.push(rect(55, 21, 6, 2, 'cream'), rect(9, 16, 2, 6, 'cream'), rect(12, 16, 2, 6, 'cream'));
   }
@@ -315,49 +319,89 @@ function salon() {
   return stageVariant(p);
 }
 
-// Crowd scale is deliberately smaller than the musicians. Two stencilled
-// shirts carry initials of the invented banner bands, not existing logos.
-function fan(x, y, punk = false, seated = false, shirt = 'denim', marked = false, gesture = 'rest') {
-  const p = [rect(x + 2, y, 5, 6, 'cream')];
-  p.push(punk ? path(`M${x + 1} ${y + 2} L${x + 1} ${y - 2} L${x + 4} ${y} L${x + 5} ${y - 4} L${x + 7} ${y - 1} L${x + 8} ${y + 3} Z`, 'red')
-    : rect(x + 1, y - 1, 7, 3, 'black'));
+// Two stencilled shirts carry initials of the invented banner bands, not existing logos.
+const fanFace = { x: 2, width: 5, height: 6 };
+function fan(x, y, punk = false, seated = false, shirt = 'denim', marked = false, gesture = 'rest', pose = {}) {
+  const { lean = 0, lift = 0, tuck = 0, step = '', elbowDrop = 0 } = pose;
+  const head = x + lean;
+  const p = [rect(head + fanFace.x, y, fanFace.width, fanFace.height, 'cream')];
+  p.push(punk ? path(`M${head + 1} ${y + 2} L${head + 1} ${y - 2} L${head + 4} ${y} L${head + 5} ${y - 4} L${head + 7} ${y - 1} L${head + 8} ${y + 3} Z`, 'red')
+    : rect(head + 1, y - 1, 7, 3, 'black'));
   p.push(path(`M${x + 1} ${y + 6} H${x + 8} L${x + 10} ${y + 16} H${x - 1} Z`, shirt, 'black'));
   if (marked) p.push(stencil('BS', x + 1, y + 8, 0.75, 'cream'));
   p.push(path(seated ? `M${x + 2} ${y + 17} H${x + 12} V${y + 24} M${x + 7} ${y + 17} L${x + 15} ${y + 20}`
-    : `M${x + 2} ${y + 17} L${x + 1} ${y + 25} M${x + 7} ${y + 17} L${x + 9} ${y + 25}`, 'none', 'denim', 3));
-  const rightArm = gesture === 'fist' ? `L${x + 13} ${y + 2} V${y - 6}`
-    : gesture === 'bottle' ? `L${x + 13} ${y + 12} L${x + 15} ${y + 6}`
-    : `L${x + 12} ${y + 11}`;
-  p.push(path(`M${x} ${y + 8} L${x - 2} ${y + 14} M${x + 8} ${y + 8} ${rightArm}`, 'none', 'cream', 2));
-  if (gesture === 'fist') p.push(rect(x + 11, y - 9, 5, 4, 'cream'));
-  if (gesture === 'bottle') p.push(path(`M${x + 14} ${y + 6} v-6 h1 v-3 h2 v3 h1 v6 Z`, 'mustard', 'black'));
+    : step || `M${x + 2} ${y + 17} L${x + 1} ${y + 25} M${x + 7} ${y + 17} L${x + 9} ${y + 25}`, 'none', 'denim', 3));
+  const rightArm = gesture === 'fist' ? `L${x + 13 - tuck} ${y + 2 + elbowDrop} V${y - 6 - lift}`
+    : gesture === 'bottle' ? `L${x + 13} ${y + 12} L${x + 15 - tuck} ${y + 6 - lift}`
+    : `L${x + 12 - tuck} ${y + 11 - lift}`;
+  p.push(path(`M${x} ${y + 8} L${x - 2 + lean} ${y + 14} M${x + 8} ${y + 8} ${rightArm}`, 'none', 'cream', 2));
+  if (gesture === 'fist') p.push(rect(x + 11 - tuck, y - 9 - lift, 5, 4, 'cream'));
+  if (gesture === 'bottle') p.push(path(`M${x + 14 - tuck} ${y + 6 - lift} v-6 h1 v-3 h2 v3 h1 v6 Z`, 'mustard', 'black'));
   return p.join('\n  ');
 }
+const entranceFan = {
+  punk: (x, y, pose) => fan(x, y, true, false, 'black', true, 'fist', pose),
+  drinker: (x, y, pose) => fan(x, y, false, false, 'green', false, 'bottle', pose),
+  neighbor: (x, y, pose) => fan(x, y, false, false, 'denim', false, 'rest', pose),
+  seated: (x, y, pose) => fan(x, y, false, true, 'red', false, 'rest', pose),
+};
 function neighbors() {
-  return `<defs>\n    <g id="punk">${fan(0, 0, true, false, 'black', true, 'fist')}</g>\n    <g id="drinker">${fan(0, 0, false, false, 'green', false, 'bottle')}</g>\n    <g id="neighbor">${fan(0, 0, false, false, 'denim')}</g>\n    <g id="seated">${fan(0, 0, false, true, 'red')}</g>\n  </defs>`;
+  return `<defs>\n${Object.entries(entranceFan).map(([id, draw]) => `    <g id="${id}">${draw(0, 0)}</g>`).join('\n')}\n  </defs>`;
 }
-function crowd() {
-  // Larger heads/gestures survive the 0.78125 scale at 400x50. These
-  // definitions are crowd-only: the entrance's neighbors remain unchanged.
-  const p = [`<defs>\n    <g id="punk" transform="scale(1.5)">${fan(0, 0, true, false, 'black', true, 'fist')}</g>\n    <g id="drinker" transform="scale(1.5)">${fan(0, 0, false, false, 'green', false, 'bottle')}</g>\n    <g id="neighbor" transform="scale(1.5)">${fan(0, 0, false, false, 'denim')}</g>\n  </defs>`,
-    path('M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z', 'black'),
-    path('M80 7 V39 M388 8 V40', 'none', 'mustard', 2),
-    path('M81 4 L145 7 L141 23 L81 20 Z', 'cream', 'red'), stencil('BARRO SUR', 86, 10, 1.5),
-    path('M389 5 L454 8 L450 24 L389 22 Z', 'red', 'cream'), stencil('RUIDO ROTO', 393, 11, 1.5, 'cream')];
-  // Two irregular rows span the full panel. Closer heads enter the bottom
-  // half; their bodies crop at the hem like a front row, not a lineup.
+const crowdScale = 2;
+const crowdFan = {
+  // Keep the fist just below the face top and the forearm bent upward.
+  punk: (x, y) => entranceFan.punk(x, y, { lift: -10, elbowDrop: 4 }),
+  drinker: entranceFan.drinker,
+  neighbor: entranceFan.neighbor,
+};
+const fanFaceCenter = fanFace.x + fanFace.width / 2;
+// main.js centers the square overlays on these strip x coordinates.
+const crowdAnchors = [
+  { id: 'punk', center: 206, y: 46, band: 'Barro Sur' },
+  { id: 'neighbor', center: 243, y: 49, band: 'Ruido Roto' },
+];
+const anchoredFan = ({ id, center, y }) => [id, center - fanFaceCenter * crowdScale, y];
+function crowd(backplate = false) {
+  const poses = Object.entries(crowdFan).map(([id, draw]) => `    <g id="${id}" transform="scale(${crowdScale})">${draw(0, 0)}</g>`);
+  const p = [`<defs>\n${poses.join('\n')}\n  </defs>`,
+    path('M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z', 'black')];
+  // Front shoulders overlap the rear row. The hem crops the enlarged bodies.
   for (const [id, x, y] of [
-    ['neighbor', 5, 20], ['punk', 33, 22], ['drinker', 61, 19], ['neighbor', 91, 23],
-    ['punk', 117, 20], ['neighbor', 146, 18], ['drinker', 174, 22], ['punk', 203, 21],
-    ['neighbor', 231, 19], ['drinker', 261, 23], ['punk', 289, 20], ['neighbor', 317, 22],
-    ['drinker', 345, 18], ['punk', 373, 23], ['neighbor', 401, 20], ['drinker', 430, 22],
-    ['punk', 459, 19], ['neighbor', 487, 23],
-    ['drinker', 18, 35], ['neighbor', 53, 34], ['punk', 87, 37], ['neighbor', 125, 35],
-    ['drinker', 162, 36], ['punk', 199, 34], ['neighbor', 236, 37], ['drinker', 273, 35],
-    ['neighbor', 311, 36], ['punk', 348, 34], ['drinker', 386, 37], ['neighbor', 424, 35], ['punk', 473, 36],
+    ['punk', 10, 31], ['drinker', 48, 34], ['neighbor', 85, 30], ['neighbor', 125, 35],
+    ['punk', 166, 31], ['drinker', 205, 36], ['punk', 244, 32], ['neighbor', 283, 35],
+    ['punk', 322, 32], ['neighbor', 361, 33], ['drinker', 399, 35], ['neighbor', 440, 31],
+    ['drinker', 480, 34],
+    ['neighbor', 3, 47], ['punk', 45, 46], ['drinker', 89, 49], ['punk', 139, 50],
+    ...(backplate ? [] : crowdAnchors.map(anchoredFan)), ['drinker', 272, 47], ['punk', 322, 49],
+    ['neighbor', 369, 46], ['drinker', 420, 50], ['punk', 470, 47],
   ]) p.push(use(id, x, y));
   return p;
 }
+function saveCrowd() {
+  save('crowd', 'Ultra-wide front row', crowd(), 512);
+  // Keep the reference crowd intact; the runtime backplate removes exactly
+  // the two figures that are now painted at full scale by the moving layers.
+  save('crowd-backplate', 'Front row without the two moving figures', crowd(true), 512);
+  for (const { id, band, y } of crowdAnchors) {
+    // Pixel-for-pixel with crowd.svg, centred on its face anchor. The scene
+    // clips the body at the existing strip hem even when the layer moves up.
+    save(`crowd-front-${id}`, `${band} front row; moving figure`, [
+      `<g transform="translate(${32 - fanFaceCenter * crowdScale} ${y - 3}) scale(${crowdScale})">${crowdFan[id](0, 0)}</g>`,
+    ]);
+  }
+}
+const entranceRail = () => path('M145 37 V57 M243 37 V57 M145 39 H243', 'none', 'mustard', 2);
+const entranceBottle = () => rect(22, 46, 3, 5, 'mustard');
+const entrancePoster = () => [banner(names.entrance[1], 146, 12, 60, 12),
+  rect(146, 11, 5, 2, 'mustard'), rect(201, 23, 5, 2, 'mustard')];
+// T8's two removals and S8's seven use removals. The (103,30) neighbor is
+// the doorway person; there is no separate inline figure in the reference.
+const queueRemovals = new Set([
+  use('punk', 145, 33), use('neighbor', 220, 32), use('neighbor', 103, 30),
+  use('neighbor', 169, 32), use('drinker', 9, 28), use('drinker', 193, 33),
+  use('punk', 38, 29), use('seated', 6, 37), use('seated', 42, 37),
+]);
 function entrance() {
   const p = [...wall(), neighbors(), rect(0, 54, 256, 10, 'green'),
     // Off-center doorway anchors the queue; left side is a social pavement.
@@ -367,27 +411,64 @@ function entrance() {
     path('M75 11 L68 9 M136 10 L143 8 M76 23 L70 27', 'none', 'cream'),
     bill(63, 30), rect(82, 54, 50, 3, 'denim'),
     // Waist-high barrier and the line to the entrance.
-    path('M145 37 V57 M243 37 V57 M145 39 H243', 'none', 'mustard', 2),
+    entranceRail(),
     use('neighbor', 103, 30), use('punk', 145, 33), use('neighbor', 169, 32),
     use('drinker', 193, 33), use('neighbor', 220, 32),
     // Separate standing conversation and seated neighbors with drinks.
     use('drinker', 9, 28), use('punk', 38, 29), rect(4, 49, 58, 3, 'mustard'),
-    use('seated', 6, 37), use('seated', 42, 37), rect(22, 46, 3, 5, 'mustard'),
+    use('seated', 6, 37), use('seated', 42, 37), entranceBottle(),
     // Shared neutral entrance; only the small pasted gig poster names a band.
-    banner(names.entrance[1], 146, 12, 60, 12),
-    rect(146, 11, 5, 2, 'mustard'), rect(201, 23, 5, 2, 'mustard')];
+    ...entrancePoster()];
   return p;
+}
+const entranceTitle = 'Shared venue entrance: ENTRADA, queue and neighbors drinking beer';
+function saveQueue() {
+  save('entrance', entranceTitle, entrance().filter(piece => !queueRemovals.has(piece)), 256);
+  save('entrance-foreground', 'Barrier, bottle and protected gig poster', [
+    bannerAlphabet([names.entrance[1]]), entranceRail(), entranceBottle(), ...entrancePoster(),
+  ], 256);
+  const poses = {
+    drinker: [{}, { lean: -1, lift: 4, tuck: 4 }, { lean: 1, lift: 7, tuck: 8 }],
+    neighbor: [{}, { lean: -1, lift: 2, tuck: 2 }, { lean: 1, lift: 3, tuck: 4 }],
+    seated: [{}, { lean: -1, lift: 2, tuck: 3 }, { lean: 1, lift: 5, tuck: 4 }],
+    punk: [{}, { lean: -1, lift: -2, tuck: 2, step: 'M6 27 L4 34 L5 35 M11 27 L13 33 L15 34' },
+      { lift: -4, tuck: 1, step: 'M6 27 L8 32 L5 35 M11 27 L10 34 L12 35' },
+      { lean: 1, lift: -2, tuck: 1, step: 'M6 27 L3 32 L4 34 M11 27 L14 32 L13 35' }],
+  };
+  for (const [id, frames] of Object.entries(poses)) {
+    frames.forEach((pose, i) => save(`queue-${id}-${i}`, `Entrance ${id} pose ${i}`, [entranceFan[id](4, 10, pose)]));
+  }
+  // Move towards the leaf at x=118 while receding. Both the head and the
+  // feet stay inside the dark x=89..118, y=25..54 aperture, including strokes.
+  const doorway = [
+    [103, 30, 0.83, {}],
+    [108, 34, 0.56, { step: 'M2 17 L5 20 L8 23 M7 17 L8 21 L12 25', tuck: 3 }],
+    [115, 38, 0.18, { step: 'M2 17 L5 22 L8 24 M7 17 L12 19 L13 24', tuck: 2 }],
+  ];
+  doorway.forEach(([x, y, scale, pose], i) => save(`queue-doorway-${i}`, `Doorway neighbor pose ${i}`, [
+    `<g transform="translate(${x} ${y}) scale(${scale})">${entranceFan.neighbor(0, 0, pose)}</g>`,
+  ], 256));
+  save('queue-doorway-3', 'Doorway neighbor inside; empty opening', [], 256);
 }
 
 mkdirSync(out, { recursive: true });
+if (process.argv[2] === '--preserved-entrance') {
+  save('entrance', entranceTitle, entrance(), 256);
+  process.exit(0);
+}
+if (process.argv.length === 3 && process.argv[2] === '--crowd-only') {
+  saveCrowd();
+  console.log('Generated 4 crowd SVGs in punk-venue/mods/punk-venue/art/');
+  process.exit(0);
+}
 for (const kind of ['guitar', 'bass', 'drums', 'singer', 'guitar2', 'keys', 'sax']) {
   for (const state of ['working', 'idle', 'blocked', 'done']) {
     save(`${kind}-${state}`, `${kind}: ${state}; original DIY gig musician`, person(kind, state));
   }
 }
 save('backdrop', 'Barro Sur: wide brick and corrugated-tin DIY stage', backdrop(), 256);
-save('crowd', 'Ultra-wide front row; invented bands Barro Sur and Ruido Roto', crowd(), 512);
-save('entrance', 'Shared venue entrance: ENTRADA, queue and neighbors drinking beer', entrance(), 256);
+saveCrowd();
+saveQueue();
 save('empty-guitar', 'Unoccupied guitar and amplifier; no person', [amp(7, 40), strings('guitar', true), path('M30 50 L26 59 H39 L35 50', 'none', 'denim', 2)]);
 save('empty-bass', 'Unoccupied bass and amplifier; no person', [amp(7, 40), strings('bass', true), path('M30 50 L26 59 H39 L35 50', 'none', 'denim', 2)]);
 save('empty-drums', 'Unoccupied drum kit and stool; no person', [rect(27, 24, 10, 3, 'denim'), path('M30 27 V33 M35 27 V33', 'none', 'denim', 2), kit()]);
@@ -398,4 +479,4 @@ save('backdrop-club', 'Cramped brick club; real-band gig banners under an amber 
 save('backdrop-galpon', 'Cold corrugated warehouse; real-band banners and stacked road crates', galpon(), 256);
 save('backdrop-plaza', 'Open-air plaza stage; real-band flags, horizon and suspended bulbs', plaza(), 256);
 save('backdrop-salon', 'Community hall; bunting, real-band posters and plastic chairs', salon(), 256);
-console.log('Generated 41 SVGs in punk-venue/mods/punk-venue/art/');
+console.log('Generated 62 SVGs in punk-venue/mods/punk-venue/art/');

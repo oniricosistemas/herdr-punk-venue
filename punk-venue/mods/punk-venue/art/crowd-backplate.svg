@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="64" viewBox="0 0 512 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Front row without the two moving figures</title>
+  <defs>
+    <g id="punk" transform="scale(2)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+  <path d="M1 2 L1 -2 L4 0 L5 -4 L7 -1 L8 3 Z" fill="#b93b36"/>
+  <path d="M1 6 H8 L10 16 H-1 Z" fill="#151412" stroke="#151412" stroke-width="1"/>
+  <path d="M1 8h1.5v0.75h-1.5Z M1 8.75h0.75v0.75h-0.75Z M2.5 8.75h0.75v0.75h-0.75Z M1 9.5h1.5v0.75h-1.5Z M1 10.25h0.75v0.75h-0.75Z M2.5 10.25h0.75v0.75h-0.75Z M1 11h1.5v0.75h-1.5Z" fill="#eee3c5"/><path d="M4 8h2.25v0.75h-2.25Z M4 8.75h0.75v0.75h-0.75Z M4 9.5h2.25v0.75h-2.25Z M5.5 10.25h0.75v0.75h-0.75Z M4 11h2.25v0.75h-2.25Z" fill="#eee3c5"/>
+  <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>
+  <path d="M0 8 L-2 14 M8 8 L13 6 V4" fill="none" stroke="#eee3c5" stroke-width="2"/>
+  <rect x="11" y="1" width="5" height="4" fill="#eee3c5"/></g>
+    <g id="drinker" transform="scale(2)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+  <rect x="1" y="-1" width="7" height="3" fill="#151412"/>
+  <path d="M1 6 H8 L10 16 H-1 Z" fill="#385947" stroke="#151412" stroke-width="1"/>
+  <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>
+  <path d="M0 8 L-2 14 M8 8 L13 12 L15 6" fill="none" stroke="#eee3c5" stroke-width="2"/>
+  <path d="M14 6 v-6 h1 v-3 h2 v3 h1 v6 Z" fill="#c4a34f" stroke="#151412" stroke-width="1"/></g>
+    <g id="neighbor" transform="scale(2)"><rect x="2" y="0" width="5" height="6" fill="#eee3c5"/>
+  <rect x="1" y="-1" width="7" height="3" fill="#151412"/>
+  <path d="M1 6 H8 L10 16 H-1 Z" fill="#627b88" stroke="#151412" stroke-width="1"/>
+  <path d="M2 17 L1 25 M7 17 L9 25" fill="none" stroke="#627b88" stroke-width="3"/>
+  <path d="M0 8 L-2 14 M8 8 L12 11" fill="none" stroke="#eee3c5" stroke-width="2"/></g>
+  </defs>
+  <path d="M0 60 L85 58 L166 61 L251 58 L340 60 L424 58 L512 60 V64 H0 Z" fill="#151412"/>
+  <use href="#punk" x="10" y="31"/>
+  <use href="#drinker" x="48" y="34"/>
+  <use href="#neighbor" x="85" y="30"/>
+  <use href="#neighbor" x="125" y="35"/>
+  <use href="#punk" x="166" y="31"/>
+  <use href="#drinker" x="205" y="36"/>
+  <use href="#punk" x="244" y="32"/>
+  <use href="#neighbor" x="283" y="35"/>
+  <use href="#punk" x="322" y="32"/>
+  <use href="#neighbor" x="361" y="33"/>
+  <use href="#drinker" x="399" y="35"/>
+  <use href="#neighbor" x="440" y="31"/>
+  <use href="#drinker" x="480" y="34"/>
+  <use href="#neighbor" x="3" y="47"/>
+  <use href="#punk" x="45" y="46"/>
+  <use href="#drinker" x="89" y="49"/>
+  <use href="#punk" x="139" y="50"/>
+  <use href="#drinker" x="272" y="47"/>
+  <use href="#punk" x="322" y="49"/>
+  <use href="#neighbor" x="369" y="46"/>
+  <use href="#drinker" x="420" y="50"/>
+  <use href="#punk" x="470" y="47"/>
+</svg>

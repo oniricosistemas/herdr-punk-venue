@@ -44,16 +44,7 @@
   <g transform="translate(63 30)"><path d="M0 1 L12 0 L14 16 L1 18 Z" fill="#eee3c5"/><rect x="3" y="4" width="8" height="2" fill="#151412"/><rect x="4" y="8" width="5" height="5" fill="#b93b36"/><rect x="3" y="15" width="9" height="1" fill="#151412"/><rect x="0" y="0" width="4" height="2" fill="#c4a34f"/></g>
   <rect x="82" y="54" width="50" height="3" fill="#627b88"/>
   <path d="M145 37 V57 M243 37 V57 M145 39 H243" fill="none" stroke="#c4a34f" stroke-width="2"/>
-  <use href="#neighbor" x="103" y="30"/>
-  <use href="#punk" x="145" y="33"/>
-  <use href="#neighbor" x="169" y="32"/>
-  <use href="#drinker" x="193" y="33"/>
-  <use href="#neighbor" x="220" y="32"/>
-  <use href="#drinker" x="9" y="28"/>
-  <use href="#punk" x="38" y="29"/>
   <rect x="4" y="49" width="58" height="3" fill="#c4a34f"/>
-  <use href="#seated" x="6" y="37"/>
-  <use href="#seated" x="42" y="37"/>
   <rect x="22" y="46" width="3" height="5" fill="#c4a34f"/>
   <g role="img" aria-label="Alerta Roja" data-lines="1" data-condensed="false" transform="translate(146 12)">
     <path d="M0 1 L60 0 L59 12 L1 11 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>

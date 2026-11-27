@@ -14,12 +14,12 @@
   <rect x="34" y="14" width="2" height="2" fill="#151412"/>
   <rect x="30" y="19" width="3" height="1" fill="#151412"/>
   <path d="M25 23 L36 41" fill="none" stroke="#c4a34f" stroke-width="2"/>
-  <path d="M23 33 L29 31 L34 36 L39 34 L42 40 L37 48 L28 50 L22 44 Z" fill="#385947" stroke="#eee3c5" stroke-width="1"/><path d="M32 38 L47 20 L51 22 L36 41 Z" fill="#c4a34f" stroke="#151412" stroke-width="1"/><path d="M47 20 L49 15 L54 17 L52 23 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/><path d="M29 43 L51 19" fill="none" stroke="#151412" stroke-width="1"/><rect x="27" y="42" width="6" height="3" fill="#151412"/><rect x="29" y="37" width="3" height="3" fill="#eee3c5"/>
   <path d="M25 24 L17 29 L12 21" fill="none" stroke="#151412" stroke-width="7"/>
   <path d="M25 24 L17 29 L12 21" fill="none" stroke="#b93b36" stroke-width="5"/>
-  <rect x="10" y="19" width="5" height="5" fill="#eee3c5"/>
   <path d="M38 24 L46 24 L55 23" fill="none" stroke="#151412" stroke-width="7"/>
   <path d="M38 24 L46 24 L55 23" fill="none" stroke="#b93b36" stroke-width="5"/>
+  <path d="M23 33 L29 31 L34 36 L39 34 L42 40 L37 48 L28 50 L22 44 Z" fill="#385947" stroke="#eee3c5" stroke-width="1"/><path d="M32 38 L47 20 L51 22 L36 41 Z" fill="#c4a34f" stroke="#151412" stroke-width="1"/><path d="M47 20 L49 15 L54 17 L52 23 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/><path d="M29 43 L51 19" fill="none" stroke="#151412" stroke-width="1"/><rect x="27" y="42" width="6" height="3" fill="#151412"/><rect x="29" y="37" width="3" height="3" fill="#eee3c5"/>
+  <rect x="10" y="19" width="5" height="5" fill="#eee3c5"/>
   <rect x="53" y="21" width="5" height="5" fill="#eee3c5"/>
   <rect x="55" y="21" width="6" height="2" fill="#eee3c5"/>
   <rect x="9" y="16" width="2" height="6" fill="#eee3c5"/>

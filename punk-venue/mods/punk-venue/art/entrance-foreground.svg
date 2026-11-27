@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="64" viewBox="0 0 256 64" shape-rendering="crispEdges" stroke-linejoin="miter" stroke-linecap="square">
+  <title>Barrier, bottle and protected gig poster</title>
+  <defs><g id="bA"><path d="M1 0h1v1h-1Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h3v1h-3Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bE"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M0 2h2v1h-2Z M0 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bJ"><path d="M2 0h1v1h-1Z M2 1h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bL"><path d="M0 0h1v1h-1Z M0 1h1v1h-1Z M0 2h1v1h-1Z M0 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bO"><path d="M0 0h3v1h-3Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h1v1h-1Z M2 2h1v1h-1Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h3v1h-3Z" fill="#151412"/></g><g id="bR"><path d="M0 0h2v1h-2Z M0 1h1v1h-1Z M2 1h1v1h-1Z M0 2h2v1h-2Z M0 3h1v1h-1Z M2 3h1v1h-1Z M0 4h1v1h-1Z M2 4h1v1h-1Z" fill="#151412"/></g><g id="bT"><path d="M0 0h3v1h-3Z M1 1h1v1h-1Z M1 2h1v1h-1Z M1 3h1v1h-1Z M1 4h1v1h-1Z" fill="#151412"/></g></defs>
+  <path d="M145 37 V57 M243 37 V57 M145 39 H243" fill="none" stroke="#c4a34f" stroke-width="2"/>
+  <rect x="22" y="46" width="3" height="5" fill="#c4a34f"/>
+  <g role="img" aria-label="Alerta Roja" data-lines="1" data-condensed="false" transform="translate(146 12)">
+    <path d="M0 1 L60 0 L59 12 L1 11 Z" fill="#eee3c5" stroke="#151412" stroke-width="1"/>
+    <g transform="translate(2.996 2.5) scale(1.256 1.4)"><use href="#bA" x="0" y="0"/><use href="#bL" x="4" y="0"/><use href="#bE" x="8" y="0"/><use href="#bR" x="12" y="0"/><use href="#bT" x="16" y="0"/><use href="#bA" x="20" y="0"/><use href="#bR" x="28" y="0"/><use href="#bO" x="32" y="0"/><use href="#bJ" x="36" y="0"/><use href="#bA" x="40" y="0"/></g>
+  </g>
+  <rect x="146" y="11" width="5" height="2" fill="#c4a34f"/>
+  <rect x="201" y="23" width="5" height="2" fill="#c4a34f"/>
+</svg>

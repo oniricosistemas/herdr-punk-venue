@@ -13,6 +13,10 @@
   <rect x="27" y="14" width="2" height="2" fill="#151412"/>
   <rect x="34" y="14" width="2" height="2" fill="#151412"/>
   <rect x="30" y="19" width="3" height="1" fill="#151412"/>
+  <path d="M25 24 L16 17 L12 5" fill="none" stroke="#151412" stroke-width="7"/>
+  <path d="M25 24 L16 17 L12 5" fill="none" stroke="#151412" stroke-width="5"/>
+  <path d="M38 24 L47 17 L51 5" fill="none" stroke="#151412" stroke-width="7"/>
+  <path d="M38 24 L47 17 L51 5" fill="none" stroke="#151412" stroke-width="5"/>
   <path d="M13 32 V56 M6 57 L13 53 L20 57 M51 29 V56 M45 57 L51 53 L57 57" fill="none" stroke="#eee3c5" stroke-width="2"/>
   <path d="M4 31 L21 29 L23 32 L5 34 Z M43 27 L59 29 L58 31 L42 30 Z" fill="#c4a34f" stroke="#151412" stroke-width="1"/>
   <rect x="15" y="35" width="12" height="9" fill="#b93b36"/>
@@ -24,11 +28,7 @@
   <circle cx="32" cy="48" r="6" fill="#151412"/>
   <path d="M28 45 L36 51 M29 52 L35 44" fill="none" stroke="#eee3c5" stroke-width="2"/>
   <path d="M22 55 L19 60 M42 55 L45 60" fill="none" stroke="#eee3c5" stroke-width="2"/>
-  <path d="M25 24 L16 17 L12 5" fill="none" stroke="#151412" stroke-width="7"/>
-  <path d="M25 24 L16 17 L12 5" fill="none" stroke="#151412" stroke-width="5"/>
   <rect x="10" y="3" width="5" height="5" fill="#eee3c5"/>
-  <path d="M38 24 L47 17 L51 5" fill="none" stroke="#151412" stroke-width="7"/>
-  <path d="M38 24 L47 17 L51 5" fill="none" stroke="#151412" stroke-width="5"/>
   <rect x="49" y="3" width="5" height="5" fill="#eee3c5"/>
   <rect x="10" y="1" width="2" height="5" fill="#eee3c5"/>
   <rect x="51" y="1" width="2" height="5" fill="#eee3c5"/>
